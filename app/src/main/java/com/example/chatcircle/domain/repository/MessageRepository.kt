@@ -1,6 +1,6 @@
-package com.giu.chatcircle.domain.repository
+package com.example.chatcircle.domain.repository
 
-import com.giu.chatcircle.domain.model.Message
+import com.example.chatcircle.domain.model.Message
 import kotlinx.coroutines.flow.Flow
 
 interface MessageRepository {

@@ -1,6 +1,6 @@
-package com.giu.chatcircle.domain.repository
+package com.example.chatcircle.domain.repository
 
-import com.giu.chatcircle.domain.model.User
+import com.example.chatcircle.domain.model.User
 
 interface AuthRepository {
     suspend fun signUp(email: String, password: String): Result<User>

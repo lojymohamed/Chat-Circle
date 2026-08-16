@@ -1,4 +1,4 @@
-package com.giu.chatcircle.domain.model
+package com.example.chatcircle.domain.model
 
 data class User(
     val uid: String = "",

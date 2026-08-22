@@ -1,0 +1,50 @@
+package com.example.chatcircle.presentation.auth.login
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.chatcircle.domain.usecase.auth.SignInUseCase
+import com.example.chatcircle.presentation.auth.AuthUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val signInUseCase: SignInUseCase
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<AuthUiState>(
+        AuthUiState.Idle
+    )
+
+    val uiState: StateFlow<AuthUiState> =
+        _uiState.asStateFlow()
+
+    fun login(
+        email: String,
+        password: String
+    ) {
+        viewModelScope.launch {
+
+            _uiState.value = AuthUiState.Loading
+
+            val result = signInUseCase(
+                email = email,
+                password = password
+            )
+
+            result
+                .onSuccess { user ->
+                    _uiState.value = AuthUiState.Success(user)
+                }
+                .onFailure { exception ->
+                    _uiState.value = AuthUiState.Error(
+                        exception.message ?: "Login failed"
+                    )
+                }
+        }
+    }
+}

@@ -7,6 +7,17 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.chatcircle.ui.login.LoginFragment"
-        android:label="Login" />
+        android:label="Login">
+
+        <action
+            android:id="@+id/action_loginFragment_to_chatRoomFragment"
+            app:destination="@id/chatRoomFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="com.example.chatcircle.ui.rooms.ChatRoomFragment"
+        android:label="Chat Rooms" />
 
 </navigation>

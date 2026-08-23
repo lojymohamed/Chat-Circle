@@ -12,7 +12,20 @@
           "package_name": "com.example.chatcircle"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "515821255987-hdh29re5tkbkbkqrqf0lpostsl93rejj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chatcircle",
+            "certificate_hash": "6f545d0c42f634dc700131bf7df841110fb0b1c1"
+          }
+        },
+        {
+          "client_id": "515821255987-r5jcl3242kf8ibepeejb8k7lt95i3a7d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDUoW-jNxpLHXRaFKONNnY-6v1sBn9spnc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "515821255987-r5jcl3242kf8ibepeejb8k7lt95i3a7d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -6,15 +6,28 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.chatcircle.ui.login.LoginFragment"
+        android:name="com.example.chatcircle.ui.auth.login.LoginFragment"
         android:label="Login">
 
+        <!-- Requirement 1: Login → Register -->
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+
+        <!-- Requirement 2: Login → Chat Rooms -->
         <action
             android:id="@+id/action_loginFragment_to_chatRoomFragment"
             app:destination="@id/chatRoomFragment" />
 
     </fragment>
 
+    <!-- Requirement 1 -->
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.chatcircle.ui.auth.register.RegisterFragment"
+        android:label="Register" />
+
+    <!-- Requirement 2 -->
     <fragment
         android:id="@+id/chatRoomFragment"
         android:name="com.example.chatcircle.ui.rooms.ChatRoomFragment"

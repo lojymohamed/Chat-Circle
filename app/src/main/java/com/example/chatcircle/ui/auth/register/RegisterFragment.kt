@@ -1,4 +1,4 @@
-package com.example.chatcircle.presentation.auth.login
+package com.example.chatcircle.ui.auth.register
 
 import android.os.Bundle
 import android.view.View
@@ -10,18 +10,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.chatcircle.R
-import com.example.chatcircle.databinding.FragmentLoginBinding
-import com.example.chatcircle.presentation.auth.AuthUiState
+import com.example.chatcircle.databinding.FragmentRegisterBinding
+import com.example.chatcircle.ui.auth.AuthUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : Fragment(R.layout.fragment_login) {
+class RegisterFragment : Fragment(R.layout.fragment_register) {
 
-    private var _binding: FragmentLoginBinding? = null
+    private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onViewCreated(
         view: View,
@@ -29,7 +29,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding = FragmentLoginBinding.bind(view)
+        _binding = FragmentRegisterBinding.bind(view)
 
         setupListeners()
         observeUiState()
@@ -37,7 +37,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun setupListeners() {
 
-        binding.btnLogin.setOnClickListener {
+        binding.btnSignUp.setOnClickListener {
 
             val email = binding.etEmail.text
                 ?.toString()
@@ -48,16 +48,19 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 ?.toString()
                 .orEmpty()
 
-            viewModel.login(
+            val confirmPassword = binding.etConfirmPassword.text
+                ?.toString()
+                .orEmpty()
+
+            viewModel.register(
                 email = email,
-                password = password
+                password = password,
+                confirmPassword = confirmPassword
             )
         }
 
-        binding.tvSignUp.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_loginFragment_to_registerFragment
-            )
+        binding.tvLogin.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -74,27 +77,29 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     when (state) {
 
                         AuthUiState.Idle -> {
-                            binding.btnLogin.isEnabled = true
+                            binding.btnSignUp.isEnabled = true
                         }
 
                         AuthUiState.Loading -> {
-                            binding.btnLogin.isEnabled = false
+                            binding.btnSignUp.isEnabled = false
                         }
 
                         is AuthUiState.Success -> {
-                            binding.btnLogin.isEnabled = true
+
+                            binding.btnSignUp.isEnabled = true
 
                             Toast.makeText(
                                 requireContext(),
-                                "Login successful",
+                                "Account created successfully",
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            // We'll navigate to Home later.
+                            findNavController().popBackStack()
                         }
 
                         is AuthUiState.Error -> {
-                            binding.btnLogin.isEnabled = true
+
+                            binding.btnSignUp.isEnabled = true
 
                             Toast.makeText(
                                 requireContext(),

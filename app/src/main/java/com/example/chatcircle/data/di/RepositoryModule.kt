@@ -1,6 +1,8 @@
-package com.example.chatcircle.di
+package com.example.chatcircle.data.di
 
+import com.example.chatcircle.data.repository.AuthRepositoryImpl
 import com.example.chatcircle.data.repository.ChatRoomRepositoryImpl
+import com.example.chatcircle.domain.repository.AuthRepository
 import com.example.chatcircle.domain.repository.ChatRoomRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -25,5 +27,13 @@ object RepositoryModule {
         firestore: FirebaseFirestore
     ): ChatRoomRepository {
         return ChatRoomRepositoryImpl(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository {
+        return authRepositoryImpl
     }
 }

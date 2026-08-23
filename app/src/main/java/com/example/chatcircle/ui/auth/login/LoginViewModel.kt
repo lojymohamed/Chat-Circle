@@ -1,9 +1,10 @@
-package com.example.chatcircle.presentation.auth.login
+package com.example.chatcircle.ui.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatcircle.domain.usecase.auth.SignInUseCase
-import com.example.chatcircle.presentation.auth.AuthUiState
+import com.example.chatcircle.domain.usecase.auth.SignInWithGoogleUseCase
+import com.example.chatcircle.ui.auth.AuthUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val signInUseCase: SignInUseCase
+    private val signInUseCase: SignInUseCase,
+    private val signInWithGoogleUseCase: SignInWithGoogleUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AuthUiState>(
@@ -44,6 +46,29 @@ class LoginViewModel @Inject constructor(
                     _uiState.value = AuthUiState.Error(
                         exception.message ?: "Login failed"
                     )
+                }
+        }
+    }
+
+    fun loginWithGoogle(idToken: String) {
+
+        viewModelScope.launch {
+
+            _uiState.value = AuthUiState.Loading
+
+            val result = signInWithGoogleUseCase(idToken)
+
+            result
+                .onSuccess { user ->
+                    _uiState.value =
+                        AuthUiState.Success(user)
+                }
+                .onFailure { exception ->
+                    _uiState.value =
+                        AuthUiState.Error(
+                            exception.message
+                                ?: "Google sign-in failed"
+                        )
                 }
         }
     }

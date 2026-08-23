@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.chatcircle.ui.login.LoginFragment"
+        android:name="com.example.chatcircle.ui.auth.login.LoginFragment"
         android:label="Login">
 
         <!-- Requirement 1: Login → Register -->
@@ -24,7 +24,7 @@
     <!-- Requirement 1 -->
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.chatcircle.presentation.auth.register.RegisterFragment"
+        android:name="com.example.chatcircle.ui.auth.register.RegisterFragment"
         android:label="Register" />
 
     <!-- Requirement 2 -->

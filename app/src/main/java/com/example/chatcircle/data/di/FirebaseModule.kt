@@ -1,5 +1,6 @@
 package com.example.chatcircle.data.di
 
+import com.example.chatcircle.data.remote.FirebaseAuthDataSource
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -15,5 +16,13 @@ object FirebaseModule {
     @Singleton //only create one instance of firebase auth
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuthDataSource(
+        firebaseAuth: FirebaseAuth
+    ): FirebaseAuthDataSource {
+        return FirebaseAuthDataSource(firebaseAuth)
     }
 }

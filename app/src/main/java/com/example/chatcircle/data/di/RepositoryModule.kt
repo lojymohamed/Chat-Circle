@@ -1,20 +1,39 @@
 package com.example.chatcircle.data.di
 
 import com.example.chatcircle.data.repository.AuthRepositoryImpl
+import com.example.chatcircle.data.repository.ChatRoomRepositoryImpl
 import com.example.chatcircle.domain.repository.AuthRepository
-import dagger.Binds
+import com.example.chatcircle.domain.repository.ChatRoomRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-//Connect the implementation to the interface
-    @Binds
+object RepositoryModule {
+
+    @Provides
     @Singleton
-    abstract fun bindAuthRepository(
-        implementation: AuthRepositoryImpl
-    ): AuthRepository
+    fun provideFirestore(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatRoomRepository(
+        firestore: FirebaseFirestore
+    ): ChatRoomRepository {
+        return ChatRoomRepositoryImpl(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository {
+        return authRepositoryImpl
+    }
 }

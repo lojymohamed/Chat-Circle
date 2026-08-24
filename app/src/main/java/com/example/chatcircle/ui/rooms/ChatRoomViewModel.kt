@@ -6,7 +6,9 @@ import com.example.chatcircle.domain.model.ChatRoom
 import com.example.chatcircle.domain.repository.ChatRoomRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,11 +16,13 @@ import javax.inject.Inject
 sealed class ChatRoomUiState {
     object Idle : ChatRoomUiState()
     object Loading : ChatRoomUiState()
-    data class Success(
-        val message: String,
-        val room: ChatRoom
-    ) : ChatRoomUiState()
+    data class Success(val message: String, val room: ChatRoom) : ChatRoomUiState()
     data class Error(val message: String) : ChatRoomUiState()
+}
+
+// NEW: one-time events, separate from uiState
+sealed class ChatRoomNavigationEvent {
+    data class NavigateToChatRoom(val roomId: String, val roomName: String) : ChatRoomNavigationEvent()
 }
 
 @HiltViewModel
@@ -28,6 +32,10 @@ class ChatRoomViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<ChatRoomUiState>(ChatRoomUiState.Idle)
     val uiState: StateFlow<ChatRoomUiState> = _uiState
+
+    // NEW
+    private val _navigationEvent = MutableSharedFlow<ChatRoomNavigationEvent>()
+    val navigationEvent: SharedFlow<ChatRoomNavigationEvent> = _navigationEvent
 
     fun createRoom(roomName: String) {
         if (roomName.isBlank()) {
@@ -47,17 +55,19 @@ class ChatRoomViewModel @Inject constructor(
                 name = roomName,
                 memberIds = listOf(currentUserId)
             )
-            _uiState.value = result.fold(
-                onSuccess = {
-                    ChatRoomUiState.Success(
-                        message = "Joined room '${it.name}'!",
-                        room = it
+            result.fold(
+                onSuccess = { room ->
+                    _uiState.value = ChatRoomUiState.Success(
+                        message = "Joined room '${room.name}'!",
+                        room = room
+                    )
+                    // NEW: fire navigation
+                    _navigationEvent.emit(
+                        ChatRoomNavigationEvent.NavigateToChatRoom(room.id, room.name)
                     )
                 },
                 onFailure = {
-                    ChatRoomUiState.Error(
-                        it.message ?: "Failed to join room"
-                    )
+                    _uiState.value = ChatRoomUiState.Error(it.message ?: "Failed to join room")
                 }
             )
         }
@@ -71,20 +81,20 @@ class ChatRoomViewModel @Inject constructor(
 
         viewModelScope.launch {
             _uiState.value = ChatRoomUiState.Loading
-
             val result = chatRoomRepository.joinRoom(roomName)
-
-            _uiState.value = result.fold(
-                onSuccess = {
-                    ChatRoomUiState.Success(
-                        message = "Room '${it.name}' created!",
-                        room = it
+            result.fold(
+                onSuccess = { room ->
+                    _uiState.value = ChatRoomUiState.Success(
+                        message = "Room '${room.name}' created!",
+                        room = room
+                    )
+                    // NEW: fire navigation
+                    _navigationEvent.emit(
+                        ChatRoomNavigationEvent.NavigateToChatRoom(room.id, room.name)
                     )
                 },
                 onFailure = {
-                    ChatRoomUiState.Error(
-                        it.message ?: "Failed to create room"
-                    )
+                    _uiState.value = ChatRoomUiState.Error(it.message ?: "Failed to create room")
                 }
             )
         }

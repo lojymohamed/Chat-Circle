@@ -21,16 +21,24 @@
 
     </fragment>
 
-    <!-- Requirement 1 -->
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.chatcircle.ui.auth.register.RegisterFragment"
         android:label="Register" />
 
-    <!-- Requirement 2 -->
     <fragment
         android:id="@+id/chatRoomFragment"
-        android:name="com.example.chatcircle.ui.rooms.ChatRoomFragment"
-        android:label="Chat Rooms" />
+        android:name="com.example.chatcircle.ui.rooms.ChatRoomFragment">
+        <action
+            android:id="@+id/action_chatRoomFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.chatcircle.ui.chat.ChatFragment">
+        <argument android:name="roomId" app:argType="string" />
+        <argument android:name="roomName" app:argType="string" />
+    </fragment>
 
 </navigation>

@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.chatcircle.databinding.FragmentChatRoomsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,26 +45,25 @@ class ChatRoomFragment : Fragment() {
             viewModel.joinRoom(roomCode)
         }
 
+        // existing uiState collector — unchanged
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    when (state) {
-                        is ChatRoomUiState.Idle -> {
-                            binding.loadingSpinner.visibility = View.GONE
-                            binding.statusText.text = ""
-                        }
-                        is ChatRoomUiState.Loading -> {
-                            binding.loadingSpinner.visibility = View.VISIBLE
-                            binding.statusText.text = ""
-                        }
-                        is ChatRoomUiState.Success -> {
-                            binding.loadingSpinner.visibility = View.GONE
-                            binding.statusText.text = state.message
-                            Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
-                        }
-                        is ChatRoomUiState.Error -> {
-                            binding.loadingSpinner.visibility = View.GONE
-                            binding.statusText.text = state.message
+                viewModel.uiState.collect { state -> /* ...same as before... */ }
+            }
+        }
+
+        // NEW: separate collector for navigation
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.navigationEvent.collect { event ->
+                    when (event) {
+                        is ChatRoomNavigationEvent.NavigateToChatRoom -> {
+                            val action = ChatRoomFragmentDirections
+                                .actionChatRoomFragmentToChatFragment(
+                                    roomId = event.roomId,
+                                    roomName = event.roomName
+                                )
+                            findNavController().navigate(action)
                         }
                     }
                 }

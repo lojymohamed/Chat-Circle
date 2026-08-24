@@ -7,6 +7,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withTimeout
 import java.util.UUID
 
 class ChatRoomRepositoryImpl(
@@ -14,41 +15,74 @@ class ChatRoomRepositoryImpl(
 ) : ChatRoomRepository {
 
     private val roomsCollection = firestore.collection("chatRooms")
-
-    override suspend fun createRoom(name: String, memberIds: List<String>): Result<ChatRoom> {
+    override suspend fun createRoom(
+        name: String,
+        memberIds: List<String>
+    ): Result<ChatRoom> {
         return try {
+            android.util.Log.d("CHAT_ROOM", "Starting room creation")
+
             val roomId = UUID.randomUUID().toString()
+
             val room = ChatRoom(
                 id = roomId,
                 name = name,
                 memberIds = memberIds
             )
-            roomsCollection.document(roomId).set(room).await()
+
+            android.util.Log.d(
+                "CHAT_ROOM",
+                "Writing room to Firestore: $roomId"
+            )
+
+            withTimeout(15_000) {
+                roomsCollection
+                    .document(roomId)
+                    .set(room)
+                    .await()
+            }
+
+            android.util.Log.d("CHAT_ROOM", "Room successfully created!")
+
             Result.success(room)
+
         } catch (e: Exception) {
+            android.util.Log.e("CHAT_ROOM", "Failed to create room", e)
             Result.failure(e)
         }
     }
 
-    override suspend fun joinRoom(roomId: String): Result<Unit> {
+    override suspend fun joinRoom(roomName: String): Result<ChatRoom> {
         return try {
-            val roomRef = roomsCollection.document(roomId)
-            val snapshot = roomRef.get().await()
 
-            if (!snapshot.exists()) {
+            val currentUserId = com.google.firebase.auth.FirebaseAuth
+                .getInstance()
+                .currentUser
+                ?.uid
+                ?: return Result.failure(Exception("Not signed in"))
+
+            val snapshot = roomsCollection
+                .whereEqualTo("name", roomName)
+                .limit(1)
+                .get()
+                .await()
+
+            if (snapshot.isEmpty) {
                 return Result.failure(Exception("Room not found"))
             }
 
-            val currentUserId = com.google.firebase.auth.FirebaseAuth
-                .getInstance().currentUser?.uid
-                ?: return Result.failure(Exception("Not signed in"))
+            val roomDocument = snapshot.documents.first()
 
-            roomRef.update(
+            val room = roomDocument.toObject(ChatRoom::class.java)
+                ?: return Result.failure(Exception("Invalid room data"))
+
+            roomDocument.reference.update(
                 "memberIds",
                 com.google.firebase.firestore.FieldValue.arrayUnion(currentUserId)
             ).await()
 
-            Result.success(Unit)
+            Result.success(room)
+
         } catch (e: Exception) {
             Result.failure(e)
         }

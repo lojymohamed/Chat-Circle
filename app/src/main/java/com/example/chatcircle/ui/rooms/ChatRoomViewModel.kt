@@ -2,6 +2,7 @@ package com.example.chatcircle.ui.rooms
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chatcircle.domain.model.ChatRoom
 import com.example.chatcircle.domain.repository.ChatRoomRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,10 @@ import javax.inject.Inject
 sealed class ChatRoomUiState {
     object Idle : ChatRoomUiState()
     object Loading : ChatRoomUiState()
-    data class Success(val message: String) : ChatRoomUiState()
+    data class Success(
+        val message: String,
+        val room: ChatRoom
+    ) : ChatRoomUiState()
     data class Error(val message: String) : ChatRoomUiState()
 }
 
@@ -44,24 +48,44 @@ class ChatRoomViewModel @Inject constructor(
                 memberIds = listOf(currentUserId)
             )
             _uiState.value = result.fold(
-                onSuccess = { ChatRoomUiState.Success("Room '${it.name}' created!") },
-                onFailure = { ChatRoomUiState.Error(it.message ?: "Failed to create room") }
+                onSuccess = {
+                    ChatRoomUiState.Success(
+                        message = "Joined room '${it.name}'!",
+                        room = it
+                    )
+                },
+                onFailure = {
+                    ChatRoomUiState.Error(
+                        it.message ?: "Failed to join room"
+                    )
+                }
             )
         }
     }
 
-    fun joinRoom(roomId: String) {
-        if (roomId.isBlank()) {
-            _uiState.value = ChatRoomUiState.Error("Room code can't be empty")
+    fun joinRoom(roomName: String) {
+        if (roomName.isBlank()) {
+            _uiState.value = ChatRoomUiState.Error("Room name can't be empty")
             return
         }
 
         viewModelScope.launch {
             _uiState.value = ChatRoomUiState.Loading
-            val result = chatRoomRepository.joinRoom(roomId)
+
+            val result = chatRoomRepository.joinRoom(roomName)
+
             _uiState.value = result.fold(
-                onSuccess = { ChatRoomUiState.Success("Joined room!") },
-                onFailure = { ChatRoomUiState.Error(it.message ?: "Failed to join room") }
+                onSuccess = {
+                    ChatRoomUiState.Success(
+                        message = "Room '${it.name}' created!",
+                        room = it
+                    )
+                },
+                onFailure = {
+                    ChatRoomUiState.Error(
+                        it.message ?: "Failed to create room"
+                    )
+                }
             )
         }
     }

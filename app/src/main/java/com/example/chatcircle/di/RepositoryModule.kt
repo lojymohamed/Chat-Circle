@@ -1,4 +1,4 @@
-package com.example.chatcircle.data.di
+package com.example.chatcircle.di
 
 import com.example.chatcircle.data.repository.AuthRepositoryImpl
 import com.example.chatcircle.data.repository.ChatRoomRepositoryImpl

@@ -1,4 +1,4 @@
-package com.example.chatcircle.data.di
+package com.example.chatcircle.di
 
 import com.example.chatcircle.data.remote.FirebaseAuthDataSource
 import com.google.firebase.auth.FirebaseAuth

@@ -33,14 +33,12 @@ class ChatViewModel @Inject constructor(
     val uiState: StateFlow<ChatUiState> = _uiState
 
     init {
-        chatRepository.observeMessages(roomId)
-            .let { flow ->
-                viewModelScope.launch {
-                    flow.collect { messages ->
-                        _uiState.value = ChatUiState.Success(messages)
-                    }
+        viewModelScope.launch {
+            chatRepository.observeMessages(roomId)
+                .collect { messages ->
+                    _uiState.value = ChatUiState.Success(messages)
                 }
-            }
+        }
     }
 
     fun sendMessage(text: String) {

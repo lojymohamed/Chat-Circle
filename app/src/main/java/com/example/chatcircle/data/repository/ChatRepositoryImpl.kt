@@ -5,6 +5,7 @@ import com.example.chatcircle.domain.repository.ChatRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.onFailure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
@@ -21,17 +22,25 @@ class ChatRepositoryImpl @Inject constructor(
             .collection("messages")
 
     override fun observeMessages(roomId: String): Flow<List<Message>> = callbackFlow {
+
         val listener = messagesCollection(roomId)
             .orderBy("timestamp", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, error ->
+
                 if (error != null) {
                     close(error)
                     return@addSnapshotListener
                 }
-                val messages = snapshot?.toObjects(Message::class.java) ?: emptyList()
+
+                val messages =
+                    snapshot?.toObjects(Message::class.java) ?: emptyList()
+
                 trySend(messages)
             }
-        awaitClose { listener.remove() }
+
+        awaitClose {
+            listener.remove()
+        }
     }
 
     override suspend fun sendMessage(

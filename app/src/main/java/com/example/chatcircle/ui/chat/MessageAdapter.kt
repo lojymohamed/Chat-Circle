@@ -28,8 +28,12 @@ class MessageAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int
+    ) {
         val message = getItem(position)
+
         when (holder) {
             is SentViewHolder -> holder.bind(message)
             is ReceivedViewHolder -> holder.bind(message)

@@ -16,6 +16,17 @@
         android:textColor="@android:color/darker_gray"
         tools:text="Sender" />
 
+    <ImageView
+        android:id="@+id/messageImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginEnd="60dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:background="@drawable/bg_bubble_received"
+        android:clipToOutline="true"
+        android:contentDescription="Received image" />
+
     <TextView
         android:id="@+id/messageText"
         android:layout_width="wrap_content"

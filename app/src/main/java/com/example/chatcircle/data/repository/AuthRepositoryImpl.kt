@@ -7,7 +7,8 @@ import com.example.chatcircle.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val authDataSource: FirebaseAuthDataSource
+    private val authDataSource: FirebaseAuthDataSource,
+    private val userRepositoryImpl: UserRepositoryImpl
 ) : AuthRepository {
 
     override suspend fun signUp(
@@ -18,7 +19,14 @@ class AuthRepositoryImpl @Inject constructor(
             val firebaseUser = authDataSource.signUp(email, password)
 
             if (firebaseUser != null) {
-                Result.success(firebaseUser.toDomainUser())
+                val domainUser = firebaseUser.toDomainUser()
+                userRepositoryImpl.upsertUser(
+                    uid = domainUser.uid,
+                    displayName = domainUser.displayName,
+                    email = domainUser.email,
+                    photoUrl = domainUser.photoUrl
+                )
+                Result.success(domainUser)
             } else {
                 Result.failure(Exception("User creation failed"))
             }
@@ -36,7 +44,14 @@ class AuthRepositoryImpl @Inject constructor(
             val firebaseUser = authDataSource.signIn(email, password)
 
             if (firebaseUser != null) {
-                Result.success(firebaseUser.toDomainUser())
+                val domainUser = firebaseUser.toDomainUser()
+                userRepositoryImpl.upsertUser(
+                    uid = domainUser.uid,
+                    displayName = domainUser.displayName,
+                    email = domainUser.email,
+                    photoUrl = domainUser.photoUrl
+                )
+                Result.success(domainUser)
             } else {
                 Result.failure(Exception("Sign in failed"))
             }
@@ -53,7 +68,14 @@ class AuthRepositoryImpl @Inject constructor(
             val firebaseUser = authDataSource.signInWithGoogle(idToken)
 
             if (firebaseUser != null) {
-                Result.success(firebaseUser.toDomainUser())
+                val domainUser = firebaseUser.toDomainUser()
+                userRepositoryImpl.upsertUser(
+                    uid = domainUser.uid,
+                    displayName = domainUser.displayName,
+                    email = domainUser.email,
+                    photoUrl = domainUser.photoUrl
+                )
+                Result.success(domainUser)
             } else {
                 Result.failure(Exception("Google sign in failed"))
             }

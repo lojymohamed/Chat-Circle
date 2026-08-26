@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_chatRoomFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
+        <action
+            android:id="@+id/action_chatRoomFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 
     <fragment
@@ -39,6 +42,18 @@
         android:name="com.example.chatcircle.ui.chat.ChatFragment">
         <argument android:name="roomId" app:argType="string" />
         <argument android:name="roomName" app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.chatcircle.ui.profile.ProfileFragment"
+        android:label="Profile">
+        <!-- Sign out action clears the back stack -->
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

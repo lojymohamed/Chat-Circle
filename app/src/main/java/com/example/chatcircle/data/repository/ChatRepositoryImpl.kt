@@ -5,7 +5,6 @@ import com.example.chatcircle.domain.repository.ChatRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.onFailure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
@@ -55,6 +54,31 @@ class ChatRepositoryImpl @Inject constructor(
                 senderId = senderId,
                 senderName = senderName,
                 text = text,
+                timestamp = System.currentTimeMillis()
+            )
+            messagesCollection(roomId)
+                .document(message.id)
+                .set(message)
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun sendImageMessage(
+        roomId: String,
+        senderId: String,
+        senderName: String,
+        imageUrl: String
+    ): Result<Unit> {
+        return try {
+            val message = Message(
+                id = UUID.randomUUID().toString(),
+                senderId = senderId,
+                senderName = senderName,
+                text = null,
+                imageUrl = imageUrl,
                 timestamp = System.currentTimeMillis()
             )
             messagesCollection(roomId)

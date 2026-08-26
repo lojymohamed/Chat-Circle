@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.process)
     implementation(libs.material)
 
     // REMOVED explicit versions for fragment & lifecycle to prevent BOM conflicts:
@@ -62,6 +63,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.15.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
+
+    // Image loading
+    implementation("io.coil-kt:coil:2.7.0")
 
     // Navigation & Credentials
     implementation(libs.androidx.navigation.fragment)

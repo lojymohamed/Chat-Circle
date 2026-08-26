@@ -6,12 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/chatToolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:titleTextColor="@android:color/white"
+        app:subtitleTextColor="@android:color/white"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +40,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/attachButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_attach"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Attach image"
+            android:scaleType="centerInside" />
 
         <EditText
             android:id="@+id/messageInput"

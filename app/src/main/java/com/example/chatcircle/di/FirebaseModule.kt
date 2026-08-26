@@ -2,6 +2,7 @@ package com.example.chatcircle.di
 
 import com.example.chatcircle.data.remote.FirebaseAuthDataSource
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,5 +25,11 @@ object FirebaseModule {
         firebaseAuth: FirebaseAuth
     ): FirebaseAuthDataSource {
         return FirebaseAuthDataSource(firebaseAuth)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseStorage(): FirebaseStorage {
+        return FirebaseStorage.getInstance()
     }
 }

@@ -1,10 +1,12 @@
 package com.example.chatcircle.ui.chat
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.chatcircle.databinding.ItemMessageReceivedBinding
 import com.example.chatcircle.databinding.ItemMessageSentBinding
 import com.example.chatcircle.domain.model.Message
@@ -43,7 +45,17 @@ class MessageAdapter(
     class SentViewHolder(private val binding: ItemMessageSentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(message: Message) {
-            binding.messageText.text = message.text
+            if (!message.imageUrl.isNullOrEmpty()) {
+                binding.messageImage.visibility = View.VISIBLE
+                binding.messageText.visibility = View.GONE
+                binding.messageImage.load(message.imageUrl) {
+                    crossfade(true)
+                }
+            } else {
+                binding.messageImage.visibility = View.GONE
+                binding.messageText.visibility = View.VISIBLE
+                binding.messageText.text = message.text
+            }
         }
     }
 
@@ -51,7 +63,17 @@ class MessageAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(message: Message) {
             binding.senderName.text = message.senderName
-            binding.messageText.text = message.text
+            if (!message.imageUrl.isNullOrEmpty()) {
+                binding.messageImage.visibility = View.VISIBLE
+                binding.messageText.visibility = View.GONE
+                binding.messageImage.load(message.imageUrl) {
+                    crossfade(true)
+                }
+            } else {
+                binding.messageImage.visibility = View.GONE
+                binding.messageText.visibility = View.VISIBLE
+                binding.messageText.text = message.text
+            }
         }
     }
 

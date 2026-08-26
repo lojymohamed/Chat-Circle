@@ -20,7 +20,6 @@ sealed class ChatRoomUiState {
     data class Error(val message: String) : ChatRoomUiState()
 }
 
-// NEW: one-time events, separate from uiState
 sealed class ChatRoomNavigationEvent {
     data class NavigateToChatRoom(val roomId: String, val roomName: String) : ChatRoomNavigationEvent()
 }
@@ -33,9 +32,23 @@ class ChatRoomViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ChatRoomUiState>(ChatRoomUiState.Idle)
     val uiState: StateFlow<ChatRoomUiState> = _uiState
 
-    // NEW
     private val _navigationEvent = MutableSharedFlow<ChatRoomNavigationEvent>()
     val navigationEvent: SharedFlow<ChatRoomNavigationEvent> = _navigationEvent
+
+    private val _userRooms = MutableStateFlow<List<ChatRoom>>(emptyList())
+    val userRooms: StateFlow<List<ChatRoom>> = _userRooms
+
+    init {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+        if (currentUserId != null) {
+            viewModelScope.launch {
+                chatRoomRepository.observeUserRooms(currentUserId)
+                    .collect { rooms ->
+                        _userRooms.value = rooms
+                    }
+            }
+        }
+    }
 
     fun createRoom(roomName: String) {
         if (roomName.isBlank()) {
@@ -58,16 +71,15 @@ class ChatRoomViewModel @Inject constructor(
             result.fold(
                 onSuccess = { room ->
                     _uiState.value = ChatRoomUiState.Success(
-                        message = "Joined room '${room.name}'!",
+                        message = "Created room '${room.name}'!",
                         room = room
                     )
-                    // NEW: fire navigation
                     _navigationEvent.emit(
                         ChatRoomNavigationEvent.NavigateToChatRoom(room.id, room.name)
                     )
                 },
                 onFailure = {
-                    _uiState.value = ChatRoomUiState.Error(it.message ?: "Failed to join room")
+                    _uiState.value = ChatRoomUiState.Error(it.message ?: "Failed to create room")
                 }
             )
         }
@@ -75,7 +87,7 @@ class ChatRoomViewModel @Inject constructor(
 
     fun joinRoom(roomName: String) {
         if (roomName.isBlank()) {
-            _uiState.value = ChatRoomUiState.Error("Room name can't be empty")
+            _uiState.value = ChatRoomUiState.Error("Room code can't be empty")
             return
         }
 
@@ -85,16 +97,15 @@ class ChatRoomViewModel @Inject constructor(
             result.fold(
                 onSuccess = { room ->
                     _uiState.value = ChatRoomUiState.Success(
-                        message = "Room '${room.name}' created!",
+                        message = "Joined room '${room.name}'!",
                         room = room
                     )
-                    // NEW: fire navigation
                     _navigationEvent.emit(
                         ChatRoomNavigationEvent.NavigateToChatRoom(room.id, room.name)
                     )
                 },
                 onFailure = {
-                    _uiState.value = ChatRoomUiState.Error(it.message ?: "Failed to create room")
+                    _uiState.value = ChatRoomUiState.Error(it.message ?: "Failed to join room")
                 }
             )
         }

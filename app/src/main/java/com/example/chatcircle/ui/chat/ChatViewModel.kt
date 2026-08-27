@@ -46,12 +46,14 @@ class ChatViewModel @Inject constructor(
 
     private val presenceJobs = mutableMapOf<String, Job>()
     private val onlineUsers = mutableSetOf<String>()
+    private var lastMarkedReadTimestamp = 0L
 
     init {
         viewModelScope.launch {
             chatRepository.observeMessages(roomId)
                 .collect { messages ->
                     _uiState.value = ChatUiState.Success(messages)
+                    markRoomAsRead(messages.maxOfOrNull { it.timestamp } ?: 0L)
 
                     // Simple presence tracking based on users who have sent messages
                     val uniqueUserIds = messages.map { it.senderId }.distinct()
@@ -73,13 +75,16 @@ class ChatViewModel @Inject constructor(
                 }
         }
 
-        markRoomAsRead()
     }
 
-    private fun markRoomAsRead() {
+    private fun markRoomAsRead(latestMessageTimestamp: Long) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val readAt = maxOf(System.currentTimeMillis(), latestMessageTimestamp)
+        if (readAt <= lastMarkedReadTimestamp) return
+        lastMarkedReadTimestamp = readAt
+
         viewModelScope.launch {
-            chatRoomRepository.markRoomAsRead(roomId, userId)
+            chatRoomRepository.markRoomAsRead(roomId, userId, readAt)
         }
     }
 

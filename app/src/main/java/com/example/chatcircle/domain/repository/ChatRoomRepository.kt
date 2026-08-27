@@ -18,6 +18,7 @@ interface ChatRoomRepository {
 
     suspend fun markRoomAsRead(
         roomId: String,
-        userId: String
+        userId: String,
+        readAt: Long
     ): Result<Unit>
 }

@@ -101,12 +101,13 @@ class ChatRoomRepositoryImpl(
 
     override suspend fun markRoomAsRead(
         roomId: String,
-        userId: String
+        userId: String,
+        readAt: Long
     ): Result<Unit> {
         return try {
             roomsCollection
                 .document(roomId)
-                .update("lastReadTimestamps.$userId", System.currentTimeMillis())
+                .update("lastReadTimestamps.$userId", readAt)
                 .await()
 
             Result.success(Unit)

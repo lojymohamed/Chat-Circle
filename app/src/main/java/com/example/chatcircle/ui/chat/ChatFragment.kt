@@ -40,7 +40,7 @@ class ChatFragment : Fragment() {
 
     // Register ActivityResult for gallery picking
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri?.let {
+        uri?.let { // if not null
             viewModel.sendImageMessage(it)
         }
     }

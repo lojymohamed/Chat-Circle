@@ -13,6 +13,13 @@ class ChatRoomAdapter(
     private val onRoomClick: (ChatRoom) -> Unit
 ) : ListAdapter<ChatRoom, ChatRoomAdapter.ChatRoomViewHolder>(DiffCallback) {
 
+    private var unreadCounts: Map<String, Int> = emptyMap()
+
+    fun updateUnreadCounts(counts: Map<String, Int>) {
+        unreadCounts = counts
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomViewHolder {
         val binding = ItemChatRoomBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -23,7 +30,8 @@ class ChatRoomAdapter(
     }
 
     override fun onBindViewHolder(holder: ChatRoomViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val room = getItem(position)
+        holder.bind(room, unreadCounts[room.id] ?: 0)
     }
 
     class ChatRoomViewHolder(
@@ -31,7 +39,7 @@ class ChatRoomAdapter(
         private val onRoomClick: (ChatRoom) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(room: ChatRoom) {
+        fun bind(room: ChatRoom, unreadCount: Int) {
             binding.roomNameText.text = room.name
             if (!room.lastMessage.isNullOrEmpty()) {
                 binding.lastMessageText.visibility = View.VISIBLE
@@ -40,6 +48,14 @@ class ChatRoomAdapter(
                 binding.lastMessageText.visibility = View.VISIBLE
                 binding.lastMessageText.text = "No messages yet"
             }
+
+            if (unreadCount > 0) {
+                binding.unreadBadge.visibility = View.VISIBLE
+                binding.unreadBadge.text = if (unreadCount > 99) "99+" else unreadCount.toString()
+            } else {
+                binding.unreadBadge.visibility = View.GONE
+            }
+
             binding.root.setOnClickListener {
                 onRoomClick(room)
             }

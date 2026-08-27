@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">chatcircle</string>
     <string name="default_web_client_id">515821255987-r5jcl3242kf8ibepeejb8k7lt95i3a7d.apps.googleusercontent.com</string>
+    <!-- Paste the App ID from your free OneSignal project here. -->
+    <string name="onesignal_app_id">214b5eb9-4177-4462-a512-45514609f692</string>
 </resources>

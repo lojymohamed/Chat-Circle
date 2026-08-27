@@ -8,4 +8,5 @@ interface UserRepository {
     fun observeOnlineStatus(uid: String): Flow<Boolean>
     suspend fun updatePresence(uid: String, isOnline: Boolean)
     suspend fun updateProfile(uid: String, displayName: String, photoUrl: android.net.Uri?): Result<Unit>
+    suspend fun updateFcmToken(uid: String, fcmToken: String): Result<Unit>
 }

@@ -41,6 +41,9 @@ class ChatViewModel @Inject constructor(
     private val _onlineCount = MutableStateFlow(0)
     val onlineCount: StateFlow<Int> = _onlineCount
 
+    private val _senderOnlineStatuses = MutableStateFlow<Map<String, Boolean>>(emptyMap())
+    val senderOnlineStatuses: StateFlow<Map<String, Boolean>> = _senderOnlineStatuses
+
     private val _isUploading = MutableStateFlow(false)
     val isUploading: StateFlow<Boolean> = _isUploading
 
@@ -61,6 +64,9 @@ class ChatViewModel @Inject constructor(
                         if (!presenceJobs.containsKey(uid)) {
                             val job = launch {
                                 userRepository.observeOnlineStatus(uid).collect { isOnline ->
+                                    _senderOnlineStatuses.value = _senderOnlineStatuses.value
+                                        .toMutableMap()
+                                        .apply { put(uid, isOnline) }
                                     if (isOnline) {
                                         onlineUsers.add(uid)
                                     } else {

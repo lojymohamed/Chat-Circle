@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.chatcircle.data.repository.StorageRepository
 import com.example.chatcircle.domain.model.Message
 import com.example.chatcircle.domain.repository.ChatRepository
+import com.example.chatcircle.domain.repository.ChatRoomRepository
 import com.example.chatcircle.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ sealed class ChatUiState {
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val chatRepository: ChatRepository,
+    private val chatRoomRepository: ChatRoomRepository,
     private val userRepository: UserRepository,
     private val storageRepository: StorageRepository,
     savedStateHandle: SavedStateHandle
@@ -50,7 +52,7 @@ class ChatViewModel @Inject constructor(
             chatRepository.observeMessages(roomId)
                 .collect { messages ->
                     _uiState.value = ChatUiState.Success(messages)
-                    
+
                     // Simple presence tracking based on users who have sent messages
                     val uniqueUserIds = messages.map { it.senderId }.distinct()
                     uniqueUserIds.forEach { uid ->
@@ -69,6 +71,15 @@ class ChatViewModel @Inject constructor(
                         }
                     }
                 }
+        }
+
+        markRoomAsRead()
+    }
+
+    private fun markRoomAsRead() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        viewModelScope.launch {
+            chatRoomRepository.markRoomAsRead(roomId, userId)
         }
     }
 

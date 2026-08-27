@@ -17,4 +17,9 @@ interface ChatRoomRepository {
     fun observeUserRooms(
         userId: String
     ): Flow<List<ChatRoom>>
+
+    suspend fun markRoomAsRead(
+        roomId: String,
+        userId: String
+    ): Result<Unit>
 }

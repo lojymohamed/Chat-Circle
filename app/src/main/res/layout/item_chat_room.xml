@@ -22,7 +22,7 @@
         android:maxLines="1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/unreadBadge"
         tools:text="Android Developers Room" />
 
     <TextView
@@ -36,8 +36,26 @@
         android:maxLines="1"
         app:layout_constraintTop_toBottomOf="@id/roomNameText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/unreadBadge"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Hey everyone! Check this out." />
+
+    <TextView
+        android:id="@+id/unreadBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="22dp"
+        android:minHeight="22dp"
+        android:gravity="center"
+        android:paddingHorizontal="6dp"
+        android:background="@drawable/bg_unread_badge"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="3"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,7 @@ class ChatRoomRepositoryImpl(
 ) : ChatRoomRepository {
 
     private val roomsCollection = firestore.collection("chatRooms")
+
     override suspend fun createRoom(
         name: String,
         memberIds: List<String>
@@ -100,5 +101,22 @@ class ChatRoomRepositoryImpl(
                 trySend(rooms)
             }
         awaitClose { listener.remove() }
+    }
+
+    override suspend fun markRoomAsRead(
+        roomId: String,
+        userId: String
+    ): Result<Unit> {
+        return try {
+            roomsCollection
+                .document(roomId)
+                .update("lastReadTimestamps.$userId", System.currentTimeMillis())
+                .await()
+
+            Result.success(Unit)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

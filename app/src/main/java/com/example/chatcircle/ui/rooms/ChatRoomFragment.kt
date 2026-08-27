@@ -117,6 +117,12 @@ class ChatRoomFragment : Fragment() {
                 }
 
                 launch {
+                    viewModel.unreadCounts.collect { counts ->
+                        roomAdapter.updateUnreadCounts(counts)
+                    }
+                }
+
+                launch {
                     viewModel.navigationEvent.collect { event ->
                         when (event) {
                             is ChatRoomNavigationEvent.NavigateToChatRoom -> {

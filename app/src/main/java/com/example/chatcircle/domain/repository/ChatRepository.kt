@@ -20,4 +20,9 @@ interface ChatRepository {
         senderName: String,
         imageUrl: String
     ): Result<Unit>
+
+    suspend fun getUnreadCount(
+        roomId: String,
+        sinceTimestamp: Long
+    ): Result<Int>
 }

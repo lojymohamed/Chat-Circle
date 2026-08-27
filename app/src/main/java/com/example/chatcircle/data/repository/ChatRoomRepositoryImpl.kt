@@ -15,6 +15,7 @@ class ChatRoomRepositoryImpl(
 ) : ChatRoomRepository {
 
     private val roomsCollection = firestore.collection("chatRooms")
+
     override suspend fun createRoom(
         name: String,
         memberIds: List<String>

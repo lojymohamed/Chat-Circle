@@ -21,22 +21,17 @@ class ChatRepositoryImpl @Inject constructor(
             .collection("messages")
 
     override fun observeMessages(roomId: String): Flow<List<Message>> = callbackFlow {
-
         val listener = messagesCollection(roomId)
             .orderBy("timestamp", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, error ->
-
                 if (error != null) {
                     close(error)
                     return@addSnapshotListener
                 }
-
                 val messages =
                     snapshot?.toObjects(Message::class.java) ?: emptyList()
-
                 trySend(messages)
             }
-
         awaitClose {
             listener.remove()
         }
@@ -86,6 +81,24 @@ class ChatRepositoryImpl @Inject constructor(
                 .set(message)
                 .await()
             Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getUnreadCount(
+        roomId: String,
+        sinceTimestamp: Long
+    ): Result<Int> {
+        return try {
+            val snapshot = messagesCollection(roomId)
+                .whereGreaterThan("timestamp", sinceTimestamp)
+                .count()
+                .get(com.google.firebase.firestore.AggregateSource.SERVER)
+                .await()
+
+            Result.success(snapshot.count.toInt())
+
         } catch (e: Exception) {
             Result.failure(e)
         }

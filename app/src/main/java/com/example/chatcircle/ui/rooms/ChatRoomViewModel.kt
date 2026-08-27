@@ -3,6 +3,7 @@ package com.example.chatcircle.ui.rooms
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatcircle.domain.model.ChatRoom
+import com.example.chatcircle.domain.repository.ChatRepository
 import com.example.chatcircle.domain.repository.ChatRoomRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +27,8 @@ sealed class ChatRoomNavigationEvent {
 
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
-    private val chatRoomRepository: ChatRoomRepository
+    private val chatRoomRepository: ChatRoomRepository,
+    private val chatRepository: ChatRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ChatRoomUiState>(ChatRoomUiState.Idle)
@@ -38,6 +40,9 @@ class ChatRoomViewModel @Inject constructor(
     private val _userRooms = MutableStateFlow<List<ChatRoom>>(emptyList())
     val userRooms: StateFlow<List<ChatRoom>> = _userRooms
 
+    private val _unreadCounts = MutableStateFlow<Map<String, Int>>(emptyMap())
+    val unreadCounts: StateFlow<Map<String, Int>> = _unreadCounts
+
     init {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
         if (currentUserId != null) {
@@ -45,8 +50,21 @@ class ChatRoomViewModel @Inject constructor(
                 chatRoomRepository.observeUserRooms(currentUserId)
                     .collect { rooms ->
                         _userRooms.value = rooms
+                        refreshUnreadCounts(rooms, currentUserId)
                     }
             }
+        }
+    }
+
+    private fun refreshUnreadCounts(rooms: List<ChatRoom>, currentUserId: String) {
+        viewModelScope.launch {
+            val counts = mutableMapOf<String, Int>()
+            for (room in rooms) {
+                val since = room.lastReadTimestamps[currentUserId] ?: 0L
+                val result = chatRepository.getUnreadCount(room.id, since)
+                counts[room.id] = result.getOrDefault(0)
+            }
+            _unreadCounts.value = counts
         }
     }
 

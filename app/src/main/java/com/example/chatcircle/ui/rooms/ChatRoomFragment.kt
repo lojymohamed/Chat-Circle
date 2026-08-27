@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatcircle.R
 import com.example.chatcircle.databinding.FragmentChatRoomsBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -132,6 +133,23 @@ class ChatRoomFragment : Fragment() {
                                         roomName = event.roomName
                                     )
                                 findNavController().navigate(action)
+                            }
+                            is ChatRoomNavigationEvent.ShowCreatedRoomCode -> {
+                                MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle("Room created")
+                                    .setMessage(
+                                        "Share this room code with others:\n\n${event.room.id}"
+                                    )
+                                    .setNegativeButton("Stay here", null)
+                                    .setPositiveButton("Open room") { _, _ ->
+                                        val action = ChatRoomFragmentDirections
+                                            .actionChatRoomFragmentToChatFragment(
+                                                roomId = event.room.id,
+                                                roomName = event.room.name
+                                            )
+                                        findNavController().navigate(action)
+                                    }
+                                    .show()
                             }
                         }
                     }

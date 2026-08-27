@@ -10,9 +10,7 @@ interface ChatRoomRepository {
         memberIds: List<String>
     ): Result<ChatRoom>
 
-    suspend fun joinRoom(
-        roomName: String
-    ): Result<ChatRoom>
+    suspend fun joinRoom(roomCode: String): Result<ChatRoom>
 
     fun observeUserRooms(
         userId: String

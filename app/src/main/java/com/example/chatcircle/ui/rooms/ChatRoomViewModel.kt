@@ -23,6 +23,7 @@ sealed class ChatRoomUiState {
 
 sealed class ChatRoomNavigationEvent {
     data class NavigateToChatRoom(val roomId: String, val roomName: String) : ChatRoomNavigationEvent()
+    data class ShowCreatedRoomCode(val room: ChatRoom) : ChatRoomNavigationEvent()
 }
 
 @HiltViewModel
@@ -92,9 +93,7 @@ class ChatRoomViewModel @Inject constructor(
                         message = "Created room '${room.name}'!",
                         room = room
                     )
-                    _navigationEvent.emit(
-                        ChatRoomNavigationEvent.NavigateToChatRoom(room.id, room.name)
-                    )
+                    _navigationEvent.emit(ChatRoomNavigationEvent.ShowCreatedRoomCode(room))
                 },
                 onFailure = {
                     _uiState.value = ChatRoomUiState.Error(it.message ?: "Failed to create room")
@@ -103,15 +102,15 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
-    fun joinRoom(roomName: String) {
-        if (roomName.isBlank()) {
+    fun joinRoom(roomCode: String) {
+        if (roomCode.isBlank()) {
             _uiState.value = ChatRoomUiState.Error("Room code can't be empty")
             return
         }
 
         viewModelScope.launch {
             _uiState.value = ChatRoomUiState.Loading
-            val result = chatRoomRepository.joinRoom(roomName)
+            val result = chatRoomRepository.joinRoom(roomCode)
             result.fold(
                 onSuccess = { room ->
                     _uiState.value = ChatRoomUiState.Success(

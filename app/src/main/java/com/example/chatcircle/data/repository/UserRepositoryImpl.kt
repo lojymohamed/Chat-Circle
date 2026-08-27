@@ -29,7 +29,8 @@ class UserRepositoryImpl @Inject constructor(
                     displayName = snapshot.getString("displayName") ?: "",
                     email = snapshot.getString("email") ?: "",
                     photoUrl = snapshot.getString("photoUrl"),
-                    isOnline = snapshot.getString("status") == "online" // returns a boolean
+                    isOnline = snapshot.getString("status") == "online", // returns a boolean
+                    fcmToken = snapshot.getString("fcmToken")
                 )
                 Result.success(user)
             } else {
@@ -123,6 +124,21 @@ class UserRepositoryImpl @Inject constructor(
             usersCollection.document(uid).set(data, com.google.firebase.firestore.SetOptions.merge()).await()
         } catch (_: Exception) {
             // Best-effort upsert
+        }
+    }
+
+    override suspend fun updateFcmToken(uid: String, fcmToken: String): Result<Unit> {
+        return try {
+            usersCollection.document(uid).set(
+                mapOf(
+                    "fcmToken" to fcmToken,
+                    "fcmTokenUpdatedAt" to com.google.firebase.firestore.FieldValue.serverTimestamp()
+                ),
+                com.google.firebase.firestore.SetOptions.merge()
+            ).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }

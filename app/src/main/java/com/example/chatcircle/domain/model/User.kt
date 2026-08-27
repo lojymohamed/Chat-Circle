@@ -5,5 +5,6 @@ data class User(
     val displayName: String = "",
     val email: String = "",
     val photoUrl: String? = null,
-    val isOnline: Boolean = false
+    val isOnline: Boolean = false,
+    val fcmToken: String? = null
 )

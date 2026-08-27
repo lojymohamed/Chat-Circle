@@ -1,5 +1,6 @@
 package com.example.chatcircle.di
 
+import android.content.Context
 import com.example.chatcircle.data.repository.AuthRepositoryImpl
 import com.example.chatcircle.data.repository.ChatRepositoryImpl
 import com.example.chatcircle.data.repository.ChatRoomRepositoryImpl
@@ -9,12 +10,14 @@ import com.example.chatcircle.domain.repository.AuthRepository
 import com.example.chatcircle.domain.repository.ChatRepository
 import com.example.chatcircle.domain.repository.ChatRoomRepository
 import com.example.chatcircle.domain.repository.UserRepository
+import com.example.chatcircle.notification.OneSignalHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -79,4 +82,11 @@ object RepositoryModule {
     ): StorageRepository {
         return StorageRepository(storage)
     }
+
+    @Provides
+    @Singleton
+    fun provideOneSignalHelper(
+        @ApplicationContext context: Context
+    ): OneSignalHelper = OneSignalHelper(context)
+
 }

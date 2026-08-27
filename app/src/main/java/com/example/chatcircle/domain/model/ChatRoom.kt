@@ -5,5 +5,6 @@ data class ChatRoom(
     val name: String = "",
     val memberIds: List<String> = emptyList(),
     val lastMessage: String? = null,
-    val lastMessageTimestamp: Long? = null
+    val lastMessageTimestamp: Long? = null,
+    val lastReadTimestamps: Map<String, Long> = emptyMap()
 )

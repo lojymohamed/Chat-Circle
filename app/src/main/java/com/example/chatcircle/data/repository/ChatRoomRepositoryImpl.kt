@@ -101,4 +101,21 @@ class ChatRoomRepositoryImpl(
             }
         awaitClose { listener.remove() }
     }
+
+    override suspend fun markRoomAsRead(
+        roomId: String,
+        userId: String
+    ): Result<Unit> {
+        return try {
+            roomsCollection
+                .document(roomId)
+                .update("lastReadTimestamps.$userId", System.currentTimeMillis())
+                .await()
+
+            Result.success(Unit)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

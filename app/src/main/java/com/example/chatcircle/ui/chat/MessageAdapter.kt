@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.chatcircle.R
 import com.example.chatcircle.databinding.ItemMessageReceivedBinding
 import com.example.chatcircle.databinding.ItemMessageSentBinding
 import com.example.chatcircle.domain.model.Message
@@ -17,6 +18,13 @@ private const val VIEW_TYPE_RECEIVED = 2
 class MessageAdapter(
     private val currentUserId: String
 ) : ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallback) {
+
+    private var onlineStatuses: Map<String, Boolean> = emptyMap()
+
+    fun updateOnlineStatuses(statuses: Map<String, Boolean>) {
+        onlineStatuses = statuses
+        notifyDataSetChanged()
+    }
 
     override fun getItemViewType(position: Int): Int =
         if (getItem(position).senderId == currentUserId) VIEW_TYPE_SENT else VIEW_TYPE_RECEIVED
@@ -38,7 +46,7 @@ class MessageAdapter(
 
         when (holder) {
             is SentViewHolder -> holder.bind(message)
-            is ReceivedViewHolder -> holder.bind(message)
+            is ReceivedViewHolder -> holder.bind(message, onlineStatuses[message.senderId] == true)
         }
     }
 
@@ -61,8 +69,11 @@ class MessageAdapter(
 
     class ReceivedViewHolder(private val binding: ItemMessageReceivedBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(message: Message) {
+        fun bind(message: Message, isOnline: Boolean) {
             binding.senderName.text = message.senderName
+            binding.presenceIndicator.setBackgroundResource(
+                if (isOnline) R.drawable.bg_presence_online else R.drawable.bg_presence_offline
+            )
             if (!message.imageUrl.isNullOrEmpty()) {
                 binding.messageImage.visibility = View.VISIBLE
                 binding.messageText.visibility = View.GONE

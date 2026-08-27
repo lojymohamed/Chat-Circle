@@ -122,6 +122,12 @@ class ChatFragment : Fragment() {
                         binding.chatToolbar.subtitle = if (count > 0) "$count online" else "Offline"
                     }
                 }
+
+                launch {
+                    viewModel.senderOnlineStatuses.collect { statuses ->
+                        messageAdapter.updateOnlineStatuses(statuses)
+                    }
+                }
                 
                 launch {
                     viewModel.isUploading.collect { isUploading ->

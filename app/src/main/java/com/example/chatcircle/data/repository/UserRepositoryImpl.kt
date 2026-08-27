@@ -13,7 +13,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val firestore: FirebaseFirestore,
+    private val firestore: FirebaseFirestore, // Inject Firestore
     private val auth: FirebaseAuth,
     private val storageRepository: StorageRepository
 ) : UserRepository {
@@ -24,12 +24,12 @@ class UserRepositoryImpl @Inject constructor(
         return try {
             val snapshot = usersCollection.document(uid).get().await()
             if (snapshot.exists()) {
-                val user = User(
+                val user = User( // Create a User object from the snapshot
                     uid = snapshot.getString("uid") ?: uid,
                     displayName = snapshot.getString("displayName") ?: "",
                     email = snapshot.getString("email") ?: "",
                     photoUrl = snapshot.getString("photoUrl"),
-                    isOnline = snapshot.getString("status") == "online"
+                    isOnline = snapshot.getString("status") == "online" // returns a boolean
                 )
                 Result.success(user)
             } else {
@@ -40,17 +40,17 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun observeOnlineStatus(uid: String): Flow<Boolean> = callbackFlow {
-        val listener = usersCollection.document(uid)
-            .addSnapshotListener { snapshot, error ->
+    override fun observeOnlineStatus(uid: String): Flow<Boolean> = callbackFlow { //callback flow acts as a bridge firestore uses callback while kotlin uses flow
+        val listener = usersCollection.document(uid) //flow is a stream of booleans
+            .addSnapshotListener { snapshot, error -> // listen to user document and notify when it changes
                 if (error != null || snapshot == null || !snapshot.exists()) {
-                    trySend(false)
+                    trySend(false) //send through the flow
                     return@addSnapshotListener
                 }
                 val status = snapshot.getString("status") ?: "offline"
                 trySend(status == "online")
             }
-        awaitClose { listener.remove() }
+        awaitClose { listener.remove() } //memory leaks
     }
 
     override suspend fun updatePresence(uid: String, isOnline: Boolean) {

@@ -3,12 +3,16 @@ package com.example.chatcircle.ui.profile
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chatcircle.data.local.LocalDbProvider
 import com.example.chatcircle.domain.model.User
 import com.example.chatcircle.domain.repository.AuthRepository
 import com.example.chatcircle.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,16 +24,24 @@ sealed class ProfileUiState {
     data class Error(val message: String) : ProfileUiState()
 }
 
+sealed class ProfileNavigationEvent {
+    object NavigateToLogin : ProfileNavigationEvent()
+}
+
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val localDbProvider: LocalDbProvider
 ) : ViewModel() {
 
     val user = MutableStateFlow<User?>(null)
 
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Idle)
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+
+    private val _navigationEvent = MutableSharedFlow<ProfileNavigationEvent>()
+    val navigationEvent: SharedFlow<ProfileNavigationEvent> = _navigationEvent.asSharedFlow()
 
     init {
         val currentUser = authRepository.currentUser()
@@ -78,6 +90,15 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun signOut() {
-        authRepository.signOut()
+        viewModelScope.launch {
+            val currentUser = authRepository.currentUser()
+            currentUser?.let {
+                // Update presence to offline before signing out
+                userRepository.updatePresence(it.uid, false)
+            }
+            authRepository.signOut()
+            localDbProvider.close()
+            _navigationEvent.emit(ProfileNavigationEvent.NavigateToLogin)
+        }
     }
 }

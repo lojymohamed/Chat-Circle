@@ -109,8 +109,12 @@ class ChatRoomRepositoryImpl @Inject constructor(
         val dao = localDbProvider.open(userId).chatRoomDao()
 
         syncScope.launch {
-            remoteRoomsFlow(userId).collect { remoteRooms ->
-                dao.upsertAll(remoteRooms.map { it.toEntity() })
+            try {
+                remoteRoomsFlow(userId).collect { remoteRooms ->
+                    dao.upsertAll(remoteRooms.map { it.toEntity() })
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("ChatRoomRepo", "Error syncing remote rooms", e)
             }
         }
 

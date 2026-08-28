@@ -1,5 +1,6 @@
 package com.example.chatcircle.di
 
+import com.example.chatcircle.data.local.LocalDbProvider
 import com.example.chatcircle.data.repository.AuthRepositoryImpl
 import com.example.chatcircle.data.repository.ChatRepositoryImpl
 import com.example.chatcircle.data.repository.ChatRoomRepositoryImpl
@@ -31,9 +32,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideChatRoomRepository(
-        firestore: FirebaseFirestore
+        firestore: FirebaseFirestore,
+        localDbProvider: LocalDbProvider
     ): ChatRoomRepository {
-        return ChatRoomRepositoryImpl(firestore)
+        return ChatRoomRepositoryImpl(firestore, localDbProvider)
     }
 
     @Provides

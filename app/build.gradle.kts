@@ -54,6 +54,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.material)
 
+    // Room (local cache DB)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
     // REMOVED explicit versions for fragment & lifecycle to prevent BOM conflicts:
     // implementation("androidx.fragment:fragment-ktx:1.8.5")
     // implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")

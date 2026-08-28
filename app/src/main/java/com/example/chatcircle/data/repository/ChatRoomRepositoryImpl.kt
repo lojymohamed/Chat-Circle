@@ -1,19 +1,30 @@
 package com.example.chatcircle.data.repository
 
+import com.example.chatcircle.data.local.LocalDbProvider
+import com.example.chatcircle.data.mapper.toDomain
+import com.example.chatcircle.data.mapper.toEntity
 import com.example.chatcircle.domain.model.ChatRoom
 import com.example.chatcircle.domain.repository.ChatRoomRepository
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
+import javax.inject.Inject
 
-class ChatRoomRepositoryImpl(
-    private val firestore: FirebaseFirestore
+class ChatRoomRepositoryImpl @Inject constructor(
+    private val firestore: FirebaseFirestore,
+    private val localDbProvider: LocalDbProvider
 ) : ChatRoomRepository {
 
     private val roomsCollection = firestore.collection("chatRooms")
+    private val syncScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override suspend fun createRoom(
         name: String,
@@ -30,10 +41,7 @@ class ChatRoomRepositoryImpl(
                 memberIds = memberIds
             )
 
-            android.util.Log.d(
-                "CHAT_ROOM",
-                "Writing room to Firestore: $roomCode"
-            )
+            android.util.Log.d("CHAT_ROOM", "Writing room to Firestore: $roomCode")
 
             withTimeout(15_000) {
                 roomsCollection
@@ -43,6 +51,11 @@ class ChatRoomRepositoryImpl(
             }
 
             android.util.Log.d("CHAT_ROOM", "Room successfully created!")
+
+            // Write-through so the creator sees it instantly.
+            com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid?.let { uid ->
+                localDbProvider.open(uid).chatRoomDao().upsert(room.toEntity())
+            }
 
             Result.success(room)
 
@@ -54,7 +67,6 @@ class ChatRoomRepositoryImpl(
 
     override suspend fun joinRoom(roomCode: String): Result<ChatRoom> {
         return try {
-
             val currentUserId = com.google.firebase.auth.FirebaseAuth
                 .getInstance()
                 .currentUser
@@ -78,14 +90,34 @@ class ChatRoomRepositoryImpl(
                 com.google.firebase.firestore.FieldValue.arrayUnion(currentUserId)
             ).await()
 
-            Result.success(room)
+            // Reflect the membership update locally too — room now includes this user.
+            val updatedRoom = room.copy(memberIds = room.memberIds + currentUserId)
+            localDbProvider.open(currentUserId).chatRoomDao().upsert(updatedRoom.toEntity())
+
+            Result.success(updatedRoom)
 
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override fun observeUserRooms(userId: String): Flow<List<ChatRoom>> = callbackFlow {
+    /**
+     * Room (the local DB) is the source of truth for the UI. Firestore's
+     * snapshotListener runs in the background and upserts into it.
+     */
+    override fun observeUserRooms(userId: String): Flow<List<ChatRoom>> {
+        val dao = localDbProvider.open(userId).chatRoomDao()
+
+        syncScope.launch {
+            remoteRoomsFlow(userId).collect { remoteRooms ->
+                dao.upsertAll(remoteRooms.map { it.toEntity() })
+            }
+        }
+
+        return dao.observeRooms().map { entities -> entities.map { it.toDomain() } }
+    }
+
+    private fun remoteRoomsFlow(userId: String): Flow<List<ChatRoom>> = callbackFlow {
         val listener = roomsCollection
             .whereArrayContains("memberIds", userId)
             .addSnapshotListener { snapshot, error ->

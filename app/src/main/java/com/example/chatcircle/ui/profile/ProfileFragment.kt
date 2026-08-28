@@ -79,9 +79,6 @@ class ProfileFragment : Fragment() {
 
         binding.signOutButton.setOnClickListener {
             viewModel.signOut()
-            findNavController().navigate(
-                ProfileFragmentDirections.actionProfileFragmentToLoginFragment()
-            )
         }
     }
 
@@ -132,6 +129,18 @@ class ProfileFragment : Fragment() {
                                 binding.loadingSpinner.visibility = View.GONE
                                 binding.saveButton.isEnabled = true
                                 Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.navigationEvent.collect { event ->
+                        when (event) {
+                            is ProfileNavigationEvent.NavigateToLogin -> {
+                                findNavController().navigate(
+                                    ProfileFragmentDirections.actionProfileFragmentToLoginFragment()
+                                )
                             }
                         }
                     }

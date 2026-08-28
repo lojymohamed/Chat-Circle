@@ -26,18 +26,39 @@ class ChatCircleApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // Listen to auth state changes to update presence
+        FirebaseAuth.getInstance().addAuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user != null) {
+                // User signed in - set online
+                updatePresence(user.uid, true)
+            } else {
+                // User signed out - set offline for the previous user
+                // Note: We can't get the UID here since user is null
+                // The signOut in ProfileViewModel handles this
+            }
+        }
+
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStart(owner: LifecycleOwner) {
-                updatePresence(true)
+                // App came to foreground - set online
+                val uid = FirebaseAuth.getInstance().currentUser?.uid
+                if (uid != null) {
+                    updatePresence(uid, true)
+                }
             }
             override fun onStop(owner: LifecycleOwner) {
-                updatePresence(false)
+                // App went to background - set offline
+                val uid = FirebaseAuth.getInstance().currentUser?.uid
+                if (uid != null) {
+                    updatePresence(uid, false)
+                }
             }
         })
     }
 
-    private fun updatePresence(isOnline: Boolean) {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+    private fun updatePresence(uid: String, isOnline: Boolean) {
         val entryPoint = EntryPoints.get(applicationContext, UserRepositoryEntryPoint::class.java)
         val userRepository = entryPoint.userRepository()
         CoroutineScope(Dispatchers.IO).launch {

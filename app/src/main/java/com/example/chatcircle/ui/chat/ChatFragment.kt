@@ -76,6 +76,7 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.chatToolbar.title = viewModel.roomName
+        binding.roomCodeBanner.text = "Room Code: ${viewModel.roomId}"
         binding.chatToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }

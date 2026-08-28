@@ -1,109 +1,257 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    Registration screen. Deliberately the same skeleton as fragment_login.xml -
+    same logo tile, spacing rhythm and field styling - so the two screens read
+    as one flow rather than two designs.
+
+    See fragment_login.xml for why android:fitsSystemWindows="true" is here.
+
+    The view ids are load-bearing - RegisterFragment binds etEmail, etPassword,
+    etConfirmPassword, btnSignUp and tvLogin.
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:background="@color/konecta_blue_soft"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+    <!--
+        This container deliberately does NOT set focusableInTouchMode. The email
+        field is meant to hold focus as soon as the screen opens, so it shows
+        its highlighted outline and raised label. The keyboard is kept down
+        separately - see RegisterFragment, which calls focusWithoutKeyboard().
+    -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="Create Account"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="32dp"
+        tools:context=".ui.auth.register.RegisterFragment">
 
-    <TextView
-        android:id="@+id/tvSubtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Join Chat Circle and start chatting"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:hint="Email"
-        app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
+        <!--
+            Kolibri stickers, same treatment as fragment_login.xml - first
+            children so they sit behind the form, corners only, alpha around
+            0.2 - but a different four, so signing up does not look like a copy
+            of signing in. See fragment_login.xml for the full reasoning.
+        -->
+        <ImageView
+            android:id="@+id/stickerNodes"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:layout_marginStart="-28dp"
+            android:layout_marginTop="-10dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.20"
+            android:contentDescription="@null"
+            android:rotation="-14"
+            android:src="@drawable/sticker_nodes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Password"
-        app:endIconMode="password_toggle"
-        app:layout_constraintTop_toBottomOf="@id/emailLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/stickerAiAgents"
+            android:layout_width="102dp"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:layout_marginTop="-4dp"
+            android:layout_marginEnd="-26dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.18"
+            android:contentDescription="@null"
+            android:rotation="13"
+            android:src="@drawable/sticker_ai_agents"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/confirmPasswordLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Confirm Password"
-        app:endIconMode="password_toggle"
-        app:layout_constraintTop_toBottomOf="@id/passwordLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etConfirmPassword"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/stickerRocket"
+            android:layout_width="108dp"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:layout_marginStart="-30dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.20"
+            android:contentDescription="@null"
+            android:rotation="-10"
+            android:src="@drawable/sticker_rocket"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <ImageView
+            android:id="@+id/stickerKolibri"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="-32dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.22"
+            android:contentDescription="@null"
+            android:rotation="9"
+            android:src="@drawable/sticker_kolibri"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSignUp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Create Account"
-        app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!--
+            The logo tile used to sit here. It was removed, but its 76dp is kept
+            as an empty Space so the title and everything under it stay exactly
+            where they were rather than sliding up the screen.
+        -->
+        <Space
+            android:id="@+id/logoSpacer"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Already have an account? Log In"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/btnSignUp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/register_title"
+            android:textAppearance="@style/TextAppearance.ChatCircle.Title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logoSpacer" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="@string/register_subtitle"
+            android:textAppearance="@style/TextAppearance.ChatCircle.Subtitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
+            style="@style/Widget.ChatCircle.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="@string/auth_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:maxLength="100"
+                android:paddingVertical="16dp"
+                android:textColor="@color/konecta_ink"
+                android:textSize="15sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
+            style="@style/Widget.ChatCircle.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="@string/auth_password"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword"
+                android:maxLength="100"
+                android:paddingVertical="16dp"
+                android:textColor="@color/konecta_ink"
+                android:textSize="15sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirmPasswordLayout"
+            style="@style/Widget.ChatCircle.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="@string/auth_confirm_password"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLength="100"
+                android:paddingVertical="16dp"
+                android:textColor="@color/konecta_ink"
+                android:textSize="15sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSignUp"
+            style="@style/Widget.ChatCircle.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:text="@string/register_action"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout" />
+
+        <LinearLayout
+            android:id="@+id/layoutLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnSignUp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_have_account"
+                android:textColor="@color/konecta_muted"
+                android:textSize="14sp" />
+
+            <!-- Kept as its own view: RegisterFragment sets the click listener on tvLogin -->
+            <TextView
+                android:id="@+id/tvLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:fontFamily="@font/poppinssemibold"
+                android:padding="4dp"
+                android:text="@string/auth_log_in"
+                android:textColor="@color/konecta_blue"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

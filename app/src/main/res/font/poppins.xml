@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Poppins family (SIL Open Font License), shared with the Learning-Project
+    app so the two products feel related.
+
+    Only four weights are bundled - regular, medium, semibold and bold - since
+    each TTF is about 150 KB and the auth screens use nothing else.
+-->
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <font
+        android:font="@font/poppinsregular"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
+    <font
+        android:font="@font/poppinsmedium"
+        android:fontStyle="normal"
+        android:fontWeight="500" />
+    <font
+        android:font="@font/poppinssemibold"
+        android:fontStyle="normal"
+        android:fontWeight="600" />
+    <font
+        android:font="@font/poppinsbold"
+        android:fontStyle="normal"
+        android:fontWeight="700" />
+</font-family>

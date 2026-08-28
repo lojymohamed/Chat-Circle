@@ -19,4 +19,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!--
+        Brand intro overlay - sits on top of the nav host and plays
+        res/raw/brand_intro.mp4, then fades away to reveal the app.
+
+        This is deliberately an overlay inside MainActivity rather than a
+        separate splash Activity or a nav-graph destination. Google's guidance
+        is explicit that a dedicated splash Activity duplicates splash screens
+        and slows startup; keeping it here means there is no Activity
+        transition between the system splash and the video.
+
+        It starts VISIBLE so it is painted on the very first frame - if it
+        started GONE the login screen could flash before the video appeared.
+        MainActivity hides it immediately on configuration changes.
+
+        clickable/focusable keep touches from reaching the fragment underneath
+        and give us tap-to-skip.
+    -->
+    <FrameLayout
+        android:id="@+id/splash_overlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/konecta_yellow"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!--
+            TextureView, not SurfaceView / VideoView. A SurfaceView punches a
+            hole through the window and shows one black frame before the
+            decoder delivers its first frame - that black flash is the single
+            most common cause of a splash looking like two screens.
+        -->
+        <TextureView
+            android:id="@+id/splash_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

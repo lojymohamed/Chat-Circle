@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    One onboarding page: eyebrow label, two-tone headline, phone mockup, and a
+    white card floating over the mockup.
+
+    The headline is a single TextView rather than two, because the two tones run
+    across a line wrap ("Easy to manage your / own agenda"). The adapter builds
+    a SpannableString so the emphasis lands on the right words regardless of
+    where the text happens to break.
+
+    The phone deliberately runs off the bottom of the screen and behind the
+    action sheet, which is why its height is fixed rather than constrained to
+    the parent bottom.
+
+    floatingCard is the element intended for the zoom animation later; it is
+    kept as a direct child of the root (not nested in the phone) so it can be
+    scaled without also scaling the device frame.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <TextView
+        android:id="@+id/tvEyebrow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins"
+        android:text="@string/onboarding_eyebrow"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHeadline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/poppins"
+        android:lineSpacingExtra="2dp"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEyebrow"
+        tools:text="Talk in real time with everyone" />
+
+    <!-- Device mockup -->
+    <FrameLayout
+        android:id="@+id/phoneFrame"
+        android:layout_width="228dp"
+        android:layout_height="430dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/bg_phone_frame"
+        android:padding="7dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvHeadline">
+
+        <FrameLayout
+            android:id="@+id/phoneScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_phone_screen"
+            android:clipToOutline="true" />
+
+        <View
+            android:layout_width="76dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_phone_notch" />
+
+    </FrameLayout>
+
+    <!-- Floating card, overlapping the lower third of the phone -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/floatingCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/phoneFrame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.72"
+        app:layout_constraintTop_toTopOf="@id/phoneFrame">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvCardCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:textColor="@color/konecta_blue"
+                        android:textSize="12sp"
+                        tools:text="Room" />
+
+                    <TextView
+                        android:id="@+id/tvCardTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/poppinssemibold"
+                        android:textColor="@color/konecta_ink"
+                        android:textSize="15sp"
+                        tools:text="Design team standup" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/bg_card_icon_circle"
+                    android:contentDescription="@null"
+                    android:padding="9dp"
+                    android:src="@drawable/ic_card_check" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/konecta_outline" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvCardMeta"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/konecta_muted"
+                    android:textSize="12sp"
+                    tools:text="4 members  ·  2 unread" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="@string/onboarding_card_action"
+                    android:textColor="@color/konecta_blue"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

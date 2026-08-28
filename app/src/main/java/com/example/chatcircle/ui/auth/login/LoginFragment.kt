@@ -23,6 +23,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+import com.example.chatcircle.ui.common.focusWithoutKeyboard
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -44,6 +45,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         credentialManager =
             CredentialManager.create(requireContext())
+
+        // Email starts focused so the field reads as ready, but the keyboard
+        // stays down until the user actually taps it.
+        binding.etEmail.focusWithoutKeyboard()
 
         setupListeners()
         observeUiState()

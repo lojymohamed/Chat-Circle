@@ -4,4 +4,41 @@
     <color name="white">#FFFFFFFF</color>
     <color name="status_online">#FF4CAF50</color>
     <color name="status_offline">#FF9E9E9E</color>
+
+    <!--
+        Brand colours sampled directly from the splash video.
+        Do not "tidy" these values - they must match the video pixels exactly
+        or the handoff from the system splash to the video will visibly flash.
+    -->
+    <!-- Colour of the opening frame of brand_intro.mp4 (t=0) -->
+    <color name="konecta_yellow">#FFEFF800</color>
+    <!-- Colour of the closing brand card of brand_intro.mp4 (t=2.0 onwards) -->
+    <color name="konecta_blue">#FF2A01CC</color>
+
+    <!--
+        The rest of the Konecta palette, derived from those two anchors.
+        These replace the stock Material3 purple across the whole app.
+    -->
+    <!-- Pressed / hovered state of the primary blue -->
+    <color name="konecta_blue_dark">#FF1E0091</color>
+    <!--
+        Very light blue wash used as the screen background. This is a flat
+        tint, not a gradient - the depth comes from the white cards and inputs
+        sitting on top of it, so if it needs adjusting, nudge this one value
+        rather than reaching for a gradient drawable.
+    -->
+    <color name="konecta_blue_soft">#FFEBE7FB</color>
+    <!-- Tint for selected chips, ripples, and subtle fills -->
+    <color name="konecta_blue_tint">#FFE4E0FB</color>
+
+    <!-- Near-black with a blue cast, so text sits in the same family as the brand -->
+    <color name="konecta_ink">#FF14103C</color>
+    <!-- Secondary / supporting text -->
+    <color name="konecta_muted">#FF7B7890</color>
+    <!-- Field and card borders -->
+    <color name="konecta_outline">#FFE2DEF5</color>
+    <!-- Cards and input fills sitting on konecta_blue_soft -->
+    <color name="konecta_surface">#FFFFFFFF</color>
+
+    <color name="konecta_error">#FFD32F2F</color>
 </resources>

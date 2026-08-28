@@ -14,6 +14,7 @@ import com.example.chatcircle.databinding.FragmentRegisterBinding
 import com.example.chatcircle.ui.auth.AuthUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.example.chatcircle.ui.common.focusWithoutKeyboard
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
@@ -30,6 +31,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentRegisterBinding.bind(view)
+
+        // Email starts focused so the field reads as ready, but the keyboard
+        // stays down until the user actually taps it.
+        binding.etEmail.focusWithoutKeyboard()
 
         setupListeners()
         observeUiState()

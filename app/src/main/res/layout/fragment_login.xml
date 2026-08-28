@@ -1,112 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    Login screen, restyled to the Konecta palette.
+
+    android:fitsSystemWindows="true" is what makes this screen full bleed: the
+    activity draws behind the system bars, and this root turns the status bar
+    inset into padding. The background therefore paints all the way to the top
+    of the display while the content stays clear of the clock. Removing this
+    line puts the title under the status bar.
+
+    The view ids here are load-bearing - LoginFragment binds etEmail,
+    etPassword, btnLogin, btnGoogleSignIn and tvSignUp.
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:background="@color/konecta_blue_soft"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+    <!--
+        This container deliberately does NOT set focusableInTouchMode. The email
+        field is meant to hold focus as soon as the screen opens, so it shows
+        its highlighted outline and raised label. The keyboard is kept down
+        separately - see LoginFragment, which calls focusWithoutKeyboard().
+    -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chat Circle"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="80dp" />
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="32dp"
+        tools:context=".ui.auth.login.LoginFragment">
 
-    <TextView
-        android:id="@+id/tvSubtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Connect with people around you"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        <!--
+            Kolibri stickers, used as quiet background decoration.
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:hint="Email"
-        app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+            Three rules keep them decoration rather than clutter:
+              * They are the FIRST children, so they draw behind the form.
+              * They live in the four corners, clear of the fields and buttons.
+              * Alpha stays around 0.2. At full strength they compete with the
+                inputs; the effect only works because they stay in the margins.
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
+            clipChildren/clipToPadding are false on the container so the ones
+            with negative margins can bleed off the edge instead of being cut
+            into hard rectangles.
+        -->
+        <ImageView
+            android:id="@+id/stickerKolibri"
+            android:layout_width="132dp"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:layout_marginStart="-34dp"
+            android:layout_marginTop="-16dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.22"
+            android:contentDescription="@null"
+            android:rotation="-12"
+            android:src="@drawable/sticker_kolibri"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Password"
-        app:endIconMode="password_toggle"
-        app:layout_constraintTop_toBottomOf="@id/emailLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/stickerRocket"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:layout_marginTop="-6dp"
+            android:layout_marginEnd="-28dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.20"
+            android:contentDescription="@null"
+            android:rotation="16"
+            android:src="@drawable/sticker_rocket"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <ImageView
+            android:id="@+id/stickerLaptop"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-26dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.20"
+            android:contentDescription="@null"
+            android:rotation="-9"
+            android:src="@drawable/sticker_laptop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Log In"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/passwordLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <ImageView
+            android:id="@+id/stickerAiAgents"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="-24dp"
+            android:layout_marginBottom="12dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.18"
+            android:contentDescription="@null"
+            android:rotation="11"
+            android:src="@drawable/sticker_ai_agents"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/tvOr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="OR"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!--
+            The logo tile used to sit here. It was removed, but its 76dp is kept
+            as an empty Space so the title and everything under it stay exactly
+            where they were rather than sliding up the screen.
+        -->
+        <Space
+            android:id="@+id/logoSpacer"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnGoogleSignIn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Continue with Google"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvOr"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/login_title"
+            android:textAppearance="@style/TextAppearance.ChatCircle.Title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logoSpacer" />
 
-    <TextView
-        android:id="@+id/tvSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Don't have an account? Sign Up"
-        android:textSize="14sp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/btnGoogleSignIn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="@string/login_subtitle"
+            android:textAppearance="@style/TextAppearance.ChatCircle.Subtitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
+            style="@style/Widget.ChatCircle.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:hint="@string/auth_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:maxLength="100"
+                android:paddingVertical="16dp"
+                android:textColor="@color/konecta_ink"
+                android:textSize="15sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
+            style="@style/Widget.ChatCircle.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="@string/auth_password"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLength="100"
+                android:paddingVertical="16dp"
+                android:textColor="@color/konecta_ink"
+                android:textSize="15sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            style="@style/Widget.ChatCircle.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:text="@string/login_action"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
+
+        <!-- "or" divider: a hairline either side of the label -->
+        <View
+            android:id="@+id/dividerStart"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/konecta_outline"
+            app:layout_constraintBottom_toBottomOf="@id/tvOr"
+            app:layout_constraintEnd_toStartOf="@id/tvOr"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvOr" />
+
+        <TextView
+            android:id="@+id/tvOr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:paddingHorizontal="16dp"
+            android:text="@string/auth_or"
+            android:textColor="@color/konecta_muted"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+
+        <View
+            android:id="@+id/dividerEnd"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/konecta_outline"
+            app:layout_constraintBottom_toBottomOf="@id/tvOr"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvOr"
+            app:layout_constraintTop_toTopOf="@id/tvOr" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGoogleSignIn"
+            style="@style/Widget.ChatCircle.Button.Social"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/auth_google"
+            app:icon="@drawable/ic_google"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvOr" />
+
+        <LinearLayout
+            android:id="@+id/layoutSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnGoogleSignIn">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_no_account"
+                android:textColor="@color/konecta_muted"
+                android:textSize="14sp" />
+
+            <!-- Kept as its own view: LoginFragment sets the click listener on tvSignUp -->
+            <TextView
+                android:id="@+id/tvSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:padding="4dp"
+                android:text="@string/auth_sign_up"
+                android:textColor="@color/konecta_blue"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppinssemibold" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

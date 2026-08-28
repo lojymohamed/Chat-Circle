@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Local AI assistant guide (kept out of version control)
+CLAUDE.md

@@ -2,7 +2,37 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/onboardingFragment">
+
+    <!--
+        Onboarding is the start destination and gates on the session, not on a
+        first-run flag: it runs on every launch for anyone who is not signed in,
+        and OnboardingFragment forwards users with an active session straight to
+        the room list.
+
+        Every action pops onboarding off the back stack, so pressing back from
+        login or the room list leaves the app rather than returning to the
+        intro.
+    -->
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.example.chatcircle.ui.onboarding.OnboardingFragment"
+        android:label="Welcome">
+
+        <action
+            android:id="@+id/action_onboardingFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/onboardingFragment"
+            app:popUpToInclusive="true" />
+
+        <!-- Taken when a session is already active, so the intro is skipped -->
+        <action
+            android:id="@+id/action_onboardingFragment_to_chatRoomFragment"
+            app:destination="@id/chatRoomFragment"
+            app:popUpTo="@id/onboardingFragment"
+            app:popUpToInclusive="true" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/loginFragment"

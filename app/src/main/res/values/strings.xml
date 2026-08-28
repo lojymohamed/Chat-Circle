@@ -1,4 +1,67 @@
 <resources>
-    <string name="app_name">chatcircle</string>
+    <string name="app_name">Chat Circle</string>
     <string name="default_web_client_id">515821255987-r5jcl3242kf8ibepeejb8k7lt95i3a7d.apps.googleusercontent.com</string>
+
+    <!-- Auth screens -->
+    <string name="auth_logo_description">Chat Circle logo</string>
+
+    <string name="login_title">Welcome back</string>
+    <string name="login_subtitle">Sign in to keep the conversation going</string>
+    <string name="login_action">Log In</string>
+    <string name="login_no_account">Don\'t have an account?</string>
+
+    <string name="register_title">Create account</string>
+    <string name="register_subtitle">Join Chat Circle and connect with people around you</string>
+    <string name="register_action">Sign Up</string>
+    <string name="register_have_account">Already have an account?</string>
+
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_confirm_password">Confirm password</string>
+    <string name="auth_or">or</string>
+    <string name="auth_google">Continue with Google</string>
+    <string name="auth_sign_up">Sign Up</string>
+    <string name="auth_log_in">Log In</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_eyebrow">Welcome to Chat Circle</string>
+    <string name="onboarding_card_action">View Details</string>
+    <string name="onboarding_have_account">I already have an account</string>
+    <string name="onboarding_create_account">Create Account</string>
+    <string name="onboarding_mock_online">Online</string>
+
+    <!--
+        Each page headline is split in two: a muted lead-in and the emphasised
+        phrase that follows it. Keeping them as separate strings means the
+        emphasis survives translation, which parsing one string would not.
+    -->
+    <string name="onboarding_1_lead">Chat with your circle in</string>
+    <string name="onboarding_1_emphasis">real time</string>
+    <string name="onboarding_1_category">Room</string>
+    <string name="onboarding_1_title">Design team standup</string>
+    <string name="onboarding_1_meta">4 members  ·  2 unread</string>
+
+    <string name="onboarding_2_lead">Create or join a room with</string>
+    <string name="onboarding_2_emphasis">one short code</string>
+    <string name="onboarding_2_category">Invite</string>
+    <string name="onboarding_2_title">Room code KM7Q2X</string>
+    <string name="onboarding_2_meta">Share it with anyone</string>
+
+    <string name="onboarding_3_lead">See who is around you</string>
+    <string name="onboarding_3_emphasis">right now</string>
+    <string name="onboarding_3_category">Presence</string>
+    <string name="onboarding_3_title">3 people are online</string>
+    <string name="onboarding_3_meta">Live in this room</string>
+
+    <string name="onboarding_4_lead">Never miss a message with</string>
+    <string name="onboarding_4_emphasis">unread badges</string>
+    <string name="onboarding_4_category">Unread</string>
+    <string name="onboarding_4_title">12 new messages</string>
+    <string name="onboarding_4_meta">Across 3 rooms</string>
+
+    <string name="onboarding_5_lead">Make it yours with</string>
+    <string name="onboarding_5_emphasis">your own profile</string>
+    <string name="onboarding_5_category">Profile</string>
+    <string name="onboarding_5_title">Your profile</string>
+    <string name="onboarding_5_meta">Photo, name and status</string>
 </resources>

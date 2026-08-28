@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Konecta wordmark at its natural aspect ratio (178.313 x 29.423), for use
+    inside layouts.
+
+    This differs from ic_splash_logo.xml, which pads the same artwork onto the
+    432x432 canvas the system splash screen requires. Use this one anywhere a
+    normal ImageView is involved.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="178dp"
+    android:height="29dp"
+    android:viewportWidth="178.313"
+    android:viewportHeight="29.423"
+    android:tint="@color/konecta_blue">
+
+    <group android:translateX="-355.04">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M506.8,23.505a6.466,6.466,0,0,1-6.466-6.466V11.106a.537.537,0,0,1,.537-.537H506V4.678h-5.671V0h-5.9V17.027A12.377,12.377,0,0,0,506.809,29.4h1.812v-5.9Z" />
+    </group>
+    <group
+        android:translateX="-55.039"
+        android:translateY="-11.954">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M89.013,16.647a12.365,12.365,0,1,0,12.365,12.365A12.365,12.365,0,0,0,89.013,16.647m0,18.839a6.479,6.479,0,1,1,6.23-6.474,6.356,6.356,0,0,1-6.23,6.474" />
+    </group>
+    <group android:translateY="-0.04">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M0,22.024v6.863H5.923V24.133l2.242-2.672.09-.108.008.009,6.313,7.525h7.733L12.431,17.116a.578.578,0,0,1,0-.74L21.608,5.324H13.875l-5.71,6.923L5.923,14.92V.056H0V22.024Z" />
+    </group>
+    <group
+        android:translateX="-118.027"
+        android:translateY="-11.956">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M205.3,19.2l-7.589,17.871a7.06,7.06,0,0,1-4.246,3.936,7.054,7.054,0,0,1-4.5,0,7.07,7.07,0,0,1-4.229-3.9l-.037-.085-3-7.068L178.956,23.5l-.025-.056a.543.543,0,0,0-.978.048l-2.746,6.47L170.36,41.378l-5.994-2.543,7.589-17.877a7.053,7.053,0,0,1,12.994,0l3.017,7.107,2.723,6.414,0,.008a.614.614,0,0,0,.042.1l0,.006a.545.545,0,0,0,.964-.031.345.345,0,0,0,.02-.048l2.737-6.448L199.3,16.658Z" />
+    </group>
+    <group
+        android:translateX="-290.528"
+        android:translateY="-11.955">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M422.176,32.5l5.655,2.4v0a12.365,12.365,0,1,1,.023-11.742l-5.667,2.4a6.124,6.124,0,0,0-5.388-3.025,6.48,6.48,0,0,0,.316,12.943,6.1,6.1,0,0,0,5.061-2.98" />
+    </group>
+    <group
+        android:translateX="-222.278"
+        android:translateY="-11.955">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M334.048,31.38a12.361,12.361,0,1,0-1.6,4.108L326.9,33.133a6.472,6.472,0,0,1-11.018-1.754Zm-18.167-4.722a6.476,6.476,0,0,1,12.064,0Z" />
+    </group>
+    <group
+        android:translateX="-391.182"
+        android:translateY="-11.955">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M563.605,17.238v1.24a12.364,12.364,0,1,0,0,21.068V40.8h5.889V17.238Zm-6.233,18.249a6.479,6.479,0,1,1,6.231-6.473,6.356,6.356,0,0,1-6.231,6.473" />
+    </group>
+</vector>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Drifting background shape. Alpha lives in the colour so the view itself
+     keeps alpha 1 and the drift animators stay free to use it. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#1AFFFFFF" />
+</shape>

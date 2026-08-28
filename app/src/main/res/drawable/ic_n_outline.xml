@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The flowing N, drawn as an outline. Converted from svg-n-moving.svg.
+
+    Unlike ic_konecta_wordmark.xml this path is stroked, not filled - fillColor
+    stays transparent and the shape exists purely as a line, which is what gives
+    it the light, drawn quality on the brand backdrop.
+
+    strokeWidth is 4 rather than the 3 in the source: the path is 1126 units
+    wide but renders a few hundred dp across on a phone, and 3 scaled down to a
+    hairline that all but vanished.
+
+    The colour is white so it can be tinted per instance - see
+    fragment_onboarding.xml, which uses one in brand yellow and one barely-there
+    white.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="201dp"
+    android:viewportWidth="1126.26"
+    android:viewportHeight="628.31">
+
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineJoin="miter"
+        android:strokeMiterLimit="10"
+        android:strokeWidth="4"
+        android:pathData="M1125.31,70.07l-210.11,446.94c-.49,1.19-1.04,2.36-1.65,3.5-47.26,95.26-162.8,134.17-258.05,86.91-38-18.85-68.71-49.73-87.36-87.83l-78.98-167.86-79.92-170c-.32-.78-.68-1.54-1.08-2.28-7.12-12.84-23.3-17.48-36.14-10.36-4.33,2.4-7.91,5.97-10.32,10.29-.45.81-.86,1.65-1.22,2.5l-79.84,169.78-129.62,275.73L.95,558.17,211.63,110.09c.14-.29.29-.57.43-.86C258.94,13.78,374.32-25.61,469.77,21.26c38.32,18.82,69.3,49.84,88.07,88.18l78.98,167.93,79.92,169.93c.29.79.72,1.5,1.08,2.28,4.66,8.47,13.57,13.72,23.23,13.7,9.56,0,18.4-5.12,23.16-13.41.54-.96,1-1.96,1.37-3l79.7-169.5L975.26.94l150.05,69.13Z" />
+
+</vector>

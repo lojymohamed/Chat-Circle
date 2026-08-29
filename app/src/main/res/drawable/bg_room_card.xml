@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Room card surface: white at ~90% so the brand band shows faintly through,
+    the way the reference cards sit *on* their coloured section rather than
+    punching an opaque hole in it.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#E6FFFFFF" />
+    <corners android:radius="16dp" />
+</shape>

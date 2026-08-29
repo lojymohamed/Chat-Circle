@@ -54,6 +54,15 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.material)
 
+    // Android 12+ system splash screen, back-ported to API 23
+    implementation(libs.androidx.core.splashscreen)
+
+    // Onboarding pager
+    implementation(libs.androidx.viewpager2)
+
+    // QR scanning for joining a room by code
+    implementation(libs.zxing.embedded)
+
     // Room (local cache DB)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

@@ -1,7 +1,43 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Chatcircle" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <!--
+        Deliberately identical to values/themes.xml.
+
+        ChatCircle is skinned in the fixed Konecta brand palette, so the app
+        keeps the same colours in dark mode rather than having the system
+        invert them into shades that are not brand colours. Keep this file in
+        sync with values/themes.xml, or delete both and drop the -night folder
+        if a real dark theme is ever designed.
+    -->
+    <style name="Base.Theme.Chatcircle" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/konecta_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/konecta_blue_tint</item>
+        <item name="colorOnPrimaryContainer">@color/konecta_ink</item>
+
+        <item name="colorSecondary">@color/konecta_blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/konecta_blue_tint</item>
+        <item name="colorOnSecondaryContainer">@color/konecta_ink</item>
+
+        <item name="android:colorBackground">@color/konecta_blue_soft</item>
+        <item name="colorSurface">@color/konecta_surface</item>
+        <item name="colorOnSurface">@color/konecta_ink</item>
+        <item name="colorOnSurfaceVariant">@color/konecta_muted</item>
+        <item name="colorOutline">@color/konecta_outline</item>
+
+        <item name="colorError">@color/konecta_error</item>
+        <item name="colorOnError">@color/white</item>
+
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:textColorPrimary">@color/konecta_ink</item>
+        <item name="android:textColorSecondary">@color/konecta_muted</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="materialButtonStyle">@style/Widget.ChatCircle.Button</item>
+        <item name="textInputStyle">@style/Widget.ChatCircle.TextInputLayout</item>
     </style>
 </resources>

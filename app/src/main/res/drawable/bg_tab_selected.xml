@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The selected segment: a brand-blue pill that slides between the two. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/konecta_blue" />
+    <corners android:radius="11dp" />
+</shape>

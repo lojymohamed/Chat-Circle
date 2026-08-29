@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    A room as a card, for the horizontal strip inside the brand band on Home.
+
+    Three things make it sit *on* the band rather than punching a hole in it:
+    the surface is white at ~90% so the blue shows faintly through, a brand
+    motif is bled off the bottom-left inside the card, and the action circle
+    overlaps the lower-right corner.
+
+    Width and height are set in RoomCardAdapter, not here: the card is a
+    fraction of the screen so it scales across devices. The dp values below are
+    only the layout-preview default.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="264dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="14dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_room_card"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <!--
+            Decoration, clipped to the card by outline. Low alpha so it reads as
+            texture rather than as a second thing to look at.
+        -->
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="84dp"
+            android:layout_marginStart="-40dp"
+            android:layout_marginBottom="-14dp"
+            android:alpha="0.13"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_n_outline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="@color/konecta_blue" />
+
+        <TextView
+            android:id="@+id/cardCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text="@string/home_card_room"
+            android:textColor="@color/konecta_muted"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/cardTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppinsbold"
+            android:maxLines="2"
+            android:textColor="@color/konecta_blue"
+            android:textSize="21sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardCategory"
+            tools:text="Design team standup" />
+
+        <TextView
+            android:id="@+id/cardMeta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins"
+            android:maxLines="1"
+            android:textColor="@color/konecta_muted"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@id/cardAction"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardTitle"
+            tools:text="4 members  ·  12 Nov" />
+
+        <ImageView
+            android:id="@+id/cardAction"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_card_action_circle"
+            android:contentDescription="@null"
+            android:padding="11dp"
+            android:src="@drawable/ic_enter_room"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/cardUnread"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_unread_badge"
+            android:fontFamily="@font/poppinssemibold"
+            android:minWidth="22dp"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="2dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="3"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

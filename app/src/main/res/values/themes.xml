@@ -1,9 +1,84 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Chatcircle" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!--
+        Base application theme - the Konecta palette.
+
+        Two things worth knowing:
+
+        1. It is Light, not DayNight. This is a branded app whose colours come
+           from a fixed brand palette, so letting the system invert it produces
+           off-brand results. values-night mirrors this file deliberately.
+
+        2. The system bars are transparent and the app draws behind them
+           (MainActivity calls WindowCompat.setDecorFitsSystemWindows(window,
+           false)). Screens claim their own safe area with
+           android:fitsSystemWindows="true" on their root view, which turns the
+           insets into padding while the background still paints edge to edge.
+           That is what removes the solid bar across the top.
+    -->
+    <style name="Base.Theme.Chatcircle" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Brand -->
+        <item name="colorPrimary">@color/konecta_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/konecta_blue_tint</item>
+        <item name="colorOnPrimaryContainer">@color/konecta_ink</item>
+
+        <item name="colorSecondary">@color/konecta_blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/konecta_blue_tint</item>
+        <item name="colorOnSecondaryContainer">@color/konecta_ink</item>
+
+        <!-- Surfaces -->
+        <item name="android:colorBackground">@color/konecta_blue_soft</item>
+        <item name="colorSurface">@color/konecta_surface</item>
+        <item name="colorOnSurface">@color/konecta_ink</item>
+        <item name="colorOnSurfaceVariant">@color/konecta_muted</item>
+        <item name="colorOutline">@color/konecta_outline</item>
+
+        <item name="colorError">@color/konecta_error</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Typography -->
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:textColorPrimary">@color/konecta_ink</item>
+        <item name="android:textColorSecondary">@color/konecta_muted</item>
+
+        <!-- Edge to edge: no painted bars, app content runs the full height -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Default widget styling -->
+        <item name="materialButtonStyle">@style/Widget.ChatCircle.Button</item>
+        <item name="textInputStyle">@style/Widget.ChatCircle.TextInputLayout</item>
     </style>
 
     <style name="Theme.Chatcircle" parent="Base.Theme.Chatcircle" />
+
+    <!--
+        Launch theme for MainActivity (Android 12+ system splash screen, back-ported
+        to API 23 by androidx.core:core-splashscreen).
+
+        This theme covers the very first moment of a cold start, before
+        brand_intro.mp4 has decoded a frame:
+
+          * A white background with the Konecta wordmark in brand blue.
+          * android:windowBackground repeats the same white. That line is what
+            prevents a flash between the splash being dismissed and the video
+            first frame being drawn - the two must always match.
+
+        Note the tradeoff: the video opens on yellow, so white does not colour
+        match frame 0 the way the old yellow background did. The 180 ms
+        crossfade in MainActivity covers the change. If it ever reads as a jump,
+        the two values to move together are this pair and that crossfade.
+
+        Do NOT add windowSplashScreenBehavior="icon_preferred" here - that value
+        forces the launcher icon to show, which would replace the wordmark.
+    -->
+    <style name="Theme.Chatcircle.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="postSplashScreenTheme">@style/Theme.Chatcircle</item>
+    </style>
 </resources>

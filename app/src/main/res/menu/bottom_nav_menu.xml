@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Bottom navigation. Each item id MUST match a destination id in nav_graph.xml
+    - NavigationUI pairs them by id, and a mismatch silently does nothing when
+    the tab is tapped.
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_tab_home"
+        android:title="@string/tab_home" />
+    <item
+        android:id="@+id/directoryFragment"
+        android:icon="@drawable/ic_tab_directory"
+        android:title="@string/tab_directory" />
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_tab_profile"
+        android:title="@string/tab_profile" />
+</menu>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Mock "room list" screen shown inside the onboarding phone frame.
+
+    This is decoration, not a real screen: it is built from static views so the
+    onboarding never depends on live data, and every id is omitted so nothing
+    here can be mistaken for a bindable view.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="12dp"
+    android:paddingTop="22dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppinsbold"
+            android:text="@string/app_name"
+            android:textColor="@color/konecta_ink"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/bg_mock_circle" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_mock_field" />
+
+    <!-- Room rows -->
+    <include layout="@layout/mock_item_room" />
+
+    <include layout="@layout/mock_item_room" />
+
+    <include layout="@layout/mock_item_room" />
+
+    <include layout="@layout/mock_item_room" />
+
+</LinearLayout>

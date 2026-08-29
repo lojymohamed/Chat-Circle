@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Onboarding host: drifting brand backdrop, story-style progress, a pager of
+    feature pages, and a fixed action sheet.
+
+    Insets are NOT handled with android:fitsSystemWindows here. That would pad
+    the whole root, which pushes the white action sheet up off the bottom edge
+    and leaves a blue strip behind the gesture bar. Instead OnboardingFragment
+    applies the top inset to this root and the bottom inset to the action sheet,
+    so the sheet paints all the way down behind the navigation bar.
+
+    The pager runs to the bottom of the parent and the sheet is drawn on top of
+    it, so the phone mockup carries on behind the sheet instead of stopping
+    above it.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/konecta_blue"
+    tools:context=".ui.onboarding.OnboardingFragment">
+
+    <!--
+        Drifting shapes. They are plain Views rather than one vector so each can
+        be animated independently; OnboardingFragment gives every one its own
+        duration so they never fall into a visible shared rhythm.
+
+        clipChildren="false" lets them travel past the layer bounds, and the
+        generous negative margins keep their edges off screen so the drift never
+        reveals a hard circle edge.
+    -->
+    <FrameLayout
+        android:id="@+id/blobLayer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/blobOne"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="-90dp"
+            android:layout_marginEnd="-80dp"
+            android:background="@drawable/bg_blob_soft" />
+
+        <View
+            android:id="@+id/blobTwo"
+            android:layout_width="340dp"
+            android:layout_height="340dp"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="-160dp"
+            android:background="@drawable/bg_blob_faint" />
+
+        <View
+            android:id="@+id/blobThree"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="-70dp"
+            android:layout_marginBottom="-60dp"
+            android:background="@drawable/bg_blob_accent" />
+
+        <View
+            android:id="@+id/blobFour"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="-90dp"
+            android:layout_marginBottom="-40dp"
+            android:background="@drawable/bg_blob_faint" />
+
+        <!--
+            The two flowing N outlines, the same motif the Konecta site uses:
+            one large and barely-there, one smaller in brand yellow.
+
+            They are last in this layer so they draw over the soft blobs, but
+            the layer as a whole still sits behind the pager - so the Ns sweep
+            past behind the phone mockup rather than crossing over it and the
+            floating card.
+
+            Both are deliberately wider than the screen so their ends run off
+            the edges and the shape reads as a fragment of something larger.
+        -->
+        <ImageView
+            android:id="@+id/nOutlineFaint"
+            android:layout_width="640dp"
+            android:layout_height="357dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="-150dp"
+            android:alpha="0.15"
+            android:contentDescription="@null"
+            android:rotation="-8"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_n_outline"
+            android:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/nOutlineAccent"
+            android:layout_width="450dp"
+            android:layout_height="251dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="120dp"
+            android:alpha="0.8"
+            android:contentDescription="@null"
+            android:rotation="7"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_n_outline"
+            android:tint="@color/konecta_yellow" />
+
+    </FrameLayout>
+
+    <!--
+        Story-style progress. Each segment is a track with a fill on top; the
+        fill is scaled from its left edge (transformPivotX="0dp") between 0 and 1
+        rather than having its width animated, which keeps the whole thing off
+        the layout pass.
+
+        Keep the child count equal to OnboardingPage.ALL.size - the fragment
+        warns if they drift apart.
+    -->
+    <LinearLayout
+        android:id="@+id/progressSegments"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment_active"
+                android:scaleX="0"
+                android:transformPivotX="0dp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment_active"
+                android:scaleX="0"
+                android:transformPivotX="0dp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment_active"
+                android:scaleX="0"
+                android:transformPivotX="0dp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment_active"
+                android:scaleX="0"
+                android:transformPivotX="0dp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_segment_active"
+                android:scaleX="0"
+                android:transformPivotX="0dp" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/onboardingPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressSegments" />
+
+    <!--
+        Tap target for page navigation: left half goes back, right half goes
+        forward. Swiping is disabled on the pager itself
+        (isUserInputEnabled = false), so this is the only way to change page by
+        hand.
+
+        Its position in the file matters. It comes after the pager so it sits
+        above it and receives the touches the pager no longer wants, and before
+        the action sheet so the sheet stays on top and its buttons still work.
+    -->
+    <View
+        android:id="@+id/tapOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="false"
+        app:layout_constraintBottom_toBottomOf="@id/onboardingPager"
+        app:layout_constraintEnd_toEndOf="@id/onboardingPager"
+        app:layout_constraintStart_toStartOf="@id/onboardingPager"
+        app:layout_constraintTop_toTopOf="@id/onboardingPager" />
+
+    <LinearLayout
+        android:id="@+id/actionSheet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_onboarding_sheet"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="26dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnHaveAccount"
+            style="@style/Widget.ChatCircle.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_have_account" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCreateAccount"
+            style="@style/Widget.ChatCircle.Button.Social"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/onboarding_create_account"
+            android:textColor="@color/konecta_blue"
+            app:strokeWidth="0dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

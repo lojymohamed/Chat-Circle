@@ -1,6 +1,8 @@
 package com.example.chatcircle.ui.auth.login
 
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -23,6 +25,9 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+import com.example.chatcircle.ui.common.focusWithoutKeyboard
+
+private const val TAG = "CC_LoginFragment"
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -44,6 +49,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         credentialManager =
             CredentialManager.create(requireContext())
+
+        // Email starts focused so the field reads as ready, but the keyboard
+        // stays down until the user actually taps it.
+        binding.etEmail.focusWithoutKeyboard()
+
+        setupStickerField()
 
         setupListeners()
         observeUiState()
@@ -109,7 +120,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                             ).show()
 
                             findNavController().navigate(
-                                R.id.action_loginFragment_to_chatRoomFragment
+                                R.id.action_loginFragment_to_homeFragment
                             )
                         }
 
@@ -202,6 +213,42 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+
+    /**
+     * Wires up the drifting sticker field behind the form.
+     *
+     * The kick is triggered from the scroll view rather than from the field
+     * itself, because the field sits behind the form and never receives
+     * touches. A listener here fires for taps that land on empty background -
+     * children like the buttons and inputs consume their own touches first,
+     * which is what we want: tapping Log In should not also fling the stickers.
+     *
+     * It returns false so the scroll view still scrolls normally.
+     */
+    private fun setupStickerField() {
+        Log.d(TAG, "setupStickerField() called")
+
+        binding.authScroll.setOnTouchListener { view, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> binding.stickerField.kick()
+                MotionEvent.ACTION_UP -> view.performClick()
+            }
+            false
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume() called: starting sticker field")
+        binding.stickerField.start()
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "onPause() called: stopping sticker field")
+        binding.stickerField.stop()
+        super.onPause()
     }
 
     override fun onDestroyView() {

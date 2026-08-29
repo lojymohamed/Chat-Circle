@@ -4,4 +4,67 @@
     <color name="white">#FFFFFFFF</color>
     <color name="status_online">#FF4CAF50</color>
     <color name="status_offline">#FF9E9E9E</color>
+
+    <!--
+        Brand colours sampled directly from the splash video.
+        Do not "tidy" these values - they must match the video pixels exactly
+        or the handoff from the system splash to the video will visibly flash.
+    -->
+    <!-- Colour of the opening frame of brand_intro.mp4 (t=0) -->
+    <color name="konecta_yellow">#FFEFF800</color>
+    <!-- Colour of the closing brand card of brand_intro.mp4 (t=2.0 onwards) -->
+    <color name="konecta_blue">#FF2A01CC</color>
+
+    <!--
+        The rest of the Konecta palette, derived from those two anchors.
+        These replace the stock Material3 purple across the whole app.
+    -->
+    <!-- Pressed / hovered state of the primary blue -->
+    <color name="konecta_blue_dark">#FF1E0091</color>
+    <!--
+        Page background. Near-white and colour-neutral on purpose.
+
+        This used to carry a lavender tint from the brand blue, which read as
+        purple across whole screens rather than as a subtle wash. The brand
+        colour now appears only where it is meant to - accent bands, primary
+        buttons, headers - and pages stay white behind it.
+
+        Kept fractionally off white so bordered white cards still separate from
+        the page.
+    -->
+    <color name="konecta_blue_soft">#FFF7F8FB</color>
+
+    <!-- Slightly deeper neutral, for chips and inactive fills. -->
+    <color name="konecta_neutral">#FFEEF0F6</color>
+    <!-- Tint for selected chips, ripples, and subtle fills -->
+    <color name="konecta_blue_tint">#FFE4E0FB</color>
+
+    <!-- Near-black with a blue cast, so text sits in the same family as the brand -->
+    <color name="konecta_ink">#FF14103C</color>
+    <!-- Secondary / supporting text -->
+    <color name="konecta_muted">#FF7B7890</color>
+    <!-- Field and card borders -->
+    <color name="konecta_outline">#FFE2DEF5</color>
+    <!-- Cards and input fills sitting on konecta_blue_soft -->
+    <color name="konecta_surface">#FFFFFFFF</color>
+
+    <color name="konecta_error">#FFD32F2F</color>
+
+    <!--
+        Avatar palette. A user with no photo gets a circle from this list,
+        picked by a stable hash of their uid, so the same person is always the
+        same colour everywhere in the app.
+
+        All eight are dark enough to carry white text at the small sizes these
+        avatars are drawn at.
+    -->
+    <color name="avatar_1">#FF0F9B8E</color>
+    <color name="avatar_2">#FF3D5AFE</color>
+    <color name="avatar_3">#FFE0574A</color>
+    <color name="avatar_4">#FF7E57C2</color>
+    <color name="avatar_5">#FFEF6C9A</color>
+    <color name="avatar_6">#FF2E9E4F</color>
+    <color name="avatar_7">#FFD98016</color>
+    <color name="avatar_8">#FF00838F</color>
+
 </resources>

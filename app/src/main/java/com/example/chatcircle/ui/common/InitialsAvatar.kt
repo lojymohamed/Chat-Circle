@@ -85,8 +85,14 @@ class InitialsAvatarDrawable(
         /** Letter height relative to the circle radius. */
         const val TEXT_SCALE = 0.95f
 
-        /** Pulls the circle in off its own bounds so the edge is not clipped. */
-        const val EDGE_INSET = 0.04f
+        /**
+         * Pulls the circle in off its own bounds.
+         *
+         * Needed because the host ShapeableImageView masks to the same circle
+         * and strokes its edge, so a circle drawn at the full half-extent gets
+         * its antialiased rim shaved - which reads as flat sides.
+         */
+        const val EDGE_INSET = 0.07f
     }
 }
 
@@ -109,6 +115,28 @@ object InitialsAvatar {
     )
 
     /**
+     * Fallback avatar for the signed-in user: always brand blue, never a
+     * palette colour.
+     *
+     * The palette exists so other people are told apart at a glance. You do not
+     * need to be told apart from yourself - and a fixed brand colour makes
+     * "this one is me" instantly readable wherever your own avatar appears.
+     *
+     * [user] is nullable because the header can render a moment before the
+     * profile loads.
+     */
+    fun forCurrentUser(context: Context, user: User?): Drawable {
+        val label = user?.displayName?.ifBlank { user.email }
+        Log.d(TAG, "forCurrentUser() called: hasUser=${user != null}")
+
+        return InitialsAvatarDrawable(
+            initial = initialOf(label),
+            backgroundColor = ContextCompat.getColor(context, R.color.konecta_blue),
+            textColor = ContextCompat.getColor(context, R.color.white)
+        )
+    }
+
+    /**
      * Fallback avatar for an arbitrary [label].
      *
      * [seed] picks the colour and should be something stable like a uid - using
@@ -129,6 +157,24 @@ object InitialsAvatar {
             initial = initial,
             backgroundColor = ContextCompat.getColor(context, PALETTE[index]),
             textColor = ContextCompat.getColor(context, R.color.white)
+        )
+    }
+
+    /**
+     * The signed-in user again, but inverted for placement on brand blue.
+     *
+     * The normal brand avatar is a blue circle with a white letter, which
+     * disappears against the blue profile header. Here the fill and the letter
+     * swap so it reads as a white disc instead.
+     */
+    fun forCurrentUserOnBrand(context: Context, user: User?): Drawable {
+        val label = user?.displayName?.ifBlank { user.email }
+        Log.d(TAG, "forCurrentUserOnBrand() called: hasUser=${user != null}")
+
+        return InitialsAvatarDrawable(
+            initial = initialOf(label),
+            backgroundColor = ContextCompat.getColor(context, R.color.white),
+            textColor = ContextCompat.getColor(context, R.color.konecta_blue)
         )
     }
 

@@ -5,11 +5,14 @@
     Fixed width so the strip scrolls in even steps rather than jittering when
     a long name follows a short one; the name itself is capped at one line and
     ellipsised for the same reason.
+
+    108dp is chosen so three and a half fit across a phone - the half is
+    deliberate, being the clearest possible signal that the row scrolls.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="78dp"
+    android:layout_width="108dp"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackgroundBorderless"
     android:clickable="true"
@@ -24,8 +27,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/personAvatar"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
+            android:layout_width="82dp"
+            android:layout_height="82dp"
             android:contentDescription="@null"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_profile"
@@ -39,8 +42,8 @@
         -->
         <View
             android:id="@+id/personPresence"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_gravity="bottom|end"
             android:background="@drawable/bg_presence_online" />
 

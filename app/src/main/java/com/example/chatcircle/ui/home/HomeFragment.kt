@@ -90,8 +90,9 @@ class HomeFragment : Fragment() {
             user.email.substringBefore('@')
         } ?: getString(R.string.home_greeting)
 
-        val initials = user?.let { InitialsAvatar.forUser(requireContext(), it) }
-            ?: InitialsAvatar.of(requireContext(), label = null, seed = null)
+        // Brand blue, because this row is always you - the palette is for
+        // telling other people apart.
+        val initials = InitialsAvatar.forCurrentUser(requireContext(), user)
 
         binding.headerAvatar.load(user?.photoUrl) {
             placeholder(initials)

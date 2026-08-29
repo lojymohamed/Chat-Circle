@@ -126,8 +126,9 @@
                     children are deferred and measured after the band, so the
                     card is what sets the height and this just fills it.
 
-                    Scaled slightly past 1 so the slow drift never exposes an
-                    edge of the image.
+                    Scaled past 1 for two reasons: the pattern reads better
+                    larger, and the overhang gives the slow drift room to move
+                    without ever exposing an edge of the image.
                 -->
                 <ImageView
                     android:id="@+id/bandPattern"
@@ -135,8 +136,8 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:scaleX="1.12"
-                    android:scaleY="1.12"
+                    android:scaleX="1.30"
+                    android:scaleY="1.30"
                     android:src="@drawable/bg_band_pattern_alt" />
 
             <LinearLayout

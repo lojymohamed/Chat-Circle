@@ -115,11 +115,11 @@
         <item name="android:insetBottom">0dp</item>
         <item name="backgroundTint">@color/konecta_neutral</item>
         <item name="cornerRadius">26dp</item>
-        <item name="iconSize">26dp</item>
+        <item name="iconSize">30dp</item>
         <item name="iconTint">@color/konecta_blue</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">0dp</item>
-        <item name="android:padding">13dp</item>
+        <item name="android:padding">11dp</item>
         <item name="elevation">0dp</item>
     </style>
 

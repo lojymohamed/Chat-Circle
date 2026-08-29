@@ -103,7 +103,7 @@ class ProfileFragment : Fragment() {
                             if (selectedImageUri == null) {
                                 if (!it.photoUrl.isNullOrEmpty()) {
                                     val initials =
-                                        InitialsAvatar.forUser(requireContext(), it)
+                                        InitialsAvatar.forCurrentUserOnBrand(requireContext(), it)
                                     binding.profileImage.load(it.photoUrl) {
                                         crossfade(true)
                                         transformations(CircleCropTransformation())
@@ -113,7 +113,7 @@ class ProfileFragment : Fragment() {
                                     }
                                 } else {
                                     binding.profileImage.setImageDrawable(
-                                        InitialsAvatar.forUser(requireContext(), it)
+                                        InitialsAvatar.forCurrentUserOnBrand(requireContext(), it)
                                     )
                                 }
                             }

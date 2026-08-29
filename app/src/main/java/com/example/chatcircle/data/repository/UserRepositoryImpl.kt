@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+private const val TAG = "CC_UserRepo"
+
 class UserRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore, // Inject Firestore
     private val auth: FirebaseAuth,
@@ -38,6 +40,47 @@ class UserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    /**
+     * Streams the whole users collection, minus [excludeUid].
+     *
+     * Firestore cannot express "not equal to" cheaply alongside an ordering, so
+     * the signed-in user is filtered out client side and the sort is done here
+     * too - the collection is small enough that this is far simpler than
+     * maintaining a composite index for it.
+     */
+    override fun observeAllUsers(excludeUid: String): Flow<List<User>> = callbackFlow {
+        android.util.Log.d(TAG, "observeAllUsers() called: excludeUid=$excludeUid")
+
+        val listener = usersCollection.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                android.util.Log.e(TAG, "observeAllUsers() failed", error)
+                trySend(emptyList())
+                return@addSnapshotListener
+            }
+
+            val users = snapshot?.documents.orEmpty().mapNotNull { document ->
+                val uid = document.getString("uid") ?: document.id
+                if (uid == excludeUid) return@mapNotNull null
+
+                User(
+                    uid = uid,
+                    displayName = document.getString("displayName").orEmpty(),
+                    email = document.getString("email").orEmpty(),
+                    photoUrl = document.getString("photoUrl"),
+                    isOnline = document.getString("status") == "online"
+                )
+            }.sortedWith(
+                compareByDescending<User> { it.isOnline }
+                    .thenBy { it.displayName.lowercase() }
+            )
+
+            android.util.Log.d(TAG, "observeAllUsers() success: count=${users.size}")
+            trySend(users)
+        }
+
+        awaitClose { listener.remove() }
     }
 
     override fun observeOnlineStatus(uid: String): Flow<Boolean> = callbackFlow { //callback flow acts as a bridge firestore uses callback while kotlin uses flow

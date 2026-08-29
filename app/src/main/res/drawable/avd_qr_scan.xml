@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The animated QR icon. Set it with app:srcCompat on an AppCompatImageView and
+    start it from code - see JoinRoomFragment.startQrAnimation().
+-->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_qr_frame">
+    <target
+        android:name="scanLine"
+        android:animation="@animator/qr_scan_sweep" />
+</animated-vector>

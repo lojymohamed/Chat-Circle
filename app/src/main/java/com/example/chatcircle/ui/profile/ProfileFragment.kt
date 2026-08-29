@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.chatcircle.R
+import com.example.chatcircle.ui.common.InitialsAvatar
 import com.example.chatcircle.databinding.FragmentProfileBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -92,16 +93,28 @@ class ProfileFragment : Fragment() {
                                 binding.displayNameInput.setText(it.displayName)
                             }
                             binding.emailText.text = it.email
+
+                            // The header name is the display name, falling back
+                            // to the email prefix so the header is never blank
+                            // for someone who has not set a name yet.
+                            binding.profileName.text = it.displayName.ifBlank {
+                                it.email.substringBefore('@')
+                            }
                             if (selectedImageUri == null) {
                                 if (!it.photoUrl.isNullOrEmpty()) {
+                                    val initials =
+                                        InitialsAvatar.forUser(requireContext(), it)
                                     binding.profileImage.load(it.photoUrl) {
                                         crossfade(true)
                                         transformations(CircleCropTransformation())
-                                        placeholder(R.drawable.ic_profile)
-                                        error(R.drawable.ic_profile)
+                                        placeholder(initials)
+                                        error(initials)
+                                        fallback(initials)
                                     }
                                 } else {
-                                    binding.profileImage.setImageResource(R.drawable.ic_profile)
+                                    binding.profileImage.setImageDrawable(
+                                        InitialsAvatar.forUser(requireContext(), it)
+                                    )
                                 }
                             }
                         }

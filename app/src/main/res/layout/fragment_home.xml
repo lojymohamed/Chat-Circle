@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Home dashboard.
+
+    The shape comes from the reference: a white identity row pinned at the top,
+    then a full-bleed brand-coloured band carrying the primary content, then
+    plain white sections below it.
+
+    The band is what makes the screen read as designed rather than as a list on
+    a tinted page - it is the only place the brand blue covers real area, which
+    is why the page background itself is near-white.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.home.HomeFragment">
+
+    <!-- Identity row -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/headerAvatar"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/auth_logo_description"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.ChatCircle.Avatar" />
+
+    <TextView
+        android:id="@+id/headerName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/poppinssemibold"
+        android:maxLines="1"
+        android:textColor="@color/konecta_ink"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@id/headerSubtitle"
+        app:layout_constraintEnd_toStartOf="@id/headerBell"
+        app:layout_constraintStart_toEndOf="@id/headerAvatar"
+        app:layout_constraintTop_toTopOf="@id/headerAvatar"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Ahmed Mahmoud" />
+
+    <TextView
+        android:id="@+id/headerSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/poppins"
+        android:maxLines="1"
+        android:text="@string/home_header_subtitle"
+        android:textColor="@color/konecta_muted"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/headerAvatar"
+        app:layout_constraintEnd_toStartOf="@id/headerBell"
+        app:layout_constraintStart_toEndOf="@id/headerAvatar"
+        app:layout_constraintTop_toBottomOf="@id/headerName" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/headerBell"
+        style="@style/Widget.ChatCircle.IconButton.Circle"
+        android:layout_marginEnd="18dp"
+        android:contentDescription="@string/home_notifications"
+        app:icon="@drawable/ic_bell"
+        app:layout_constraintBottom_toBottomOf="@id/headerAvatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/headerAvatar" />
+
+    <!-- Unread marker, parked on the bell corner. -->
+    <View
+        android:id="@+id/headerBellDot"
+        android:layout_width="11dp"
+        android:layout_height="11dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:background="@drawable/bg_notification_dot"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/headerBell"
+        app:layout_constraintTop_toTopOf="@id/headerBell"
+        tools:visibility="visible" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerAvatar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!--
+                Brand band.
+
+                Its height comes from the room card inside it, not from the
+                decoration - see the note on bandPattern below for why that
+                distinction matters here.
+            -->
+            <FrameLayout
+                android:id="@+id/bandContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/konecta_blue">
+
+                <!--
+                    match_parent, NOT a fixed size. FrameLayout sizes its
+                    wrap_content height to the tallest child, so fixed-height
+                    decoration here would dictate how tall the band is - which
+                    is what previously stretched it to 480dp. match_parent
+                    children are deferred and measured after the band, so the
+                    card is what sets the height and this just fills it.
+
+                    Scaled slightly past 1 so the slow drift never exposes an
+                    edge of the image.
+                -->
+                <ImageView
+                    android:id="@+id/bandPattern"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:scaleX="1.12"
+                    android:scaleY="1.12"
+                    android:src="@drawable/bg_band_pattern_alt" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="26dp"
+                android:paddingBottom="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="20dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppinsbold"
+                        android:letterSpacing="0.04"
+                        android:text="@string/home_band_title"
+                        android:textColor="@color/white"
+                        android:textSize="19sp" />
+
+                    <TextView
+                        android:id="@+id/bandSeeAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:padding="4dp"
+                        android:text="@string/home_see_all"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/roomCardsRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="20dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/item_room_card" />
+
+                <LinearLayout
+                    android:id="@+id/bandEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppinssemibold"
+                        android:text="@string/home_band_empty"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:alpha="0.8"
+                        android:fontFamily="@font/poppins"
+                        android:text="@string/home_band_empty_hint"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            </FrameLayout>
+
+            <!-- People -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppinsbold"
+                    android:letterSpacing="0.04"
+                    android:text="@string/home_speakers"
+                    android:textColor="@color/konecta_ink"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/peopleSeeAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:padding="4dp"
+                    android:text="@string/home_see_all"
+                    android:textColor="@color/konecta_blue"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/peopleRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_person" />
+
+            <TextView
+                android:id="@+id/peopleEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:fontFamily="@font/poppins"
+                android:text="@string/home_no_people"
+                android:textColor="@color/konecta_muted"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!--
+        Creating and joining used to be two buttons taking a whole row of the
+        page. They are both occasional actions, so they collapse into one FAB
+        that opens a sheet - see HomeFragment.showRoomActions().
+    -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabRoomActions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:contentDescription="@string/home_room_actions"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/konecta_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

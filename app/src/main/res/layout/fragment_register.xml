@@ -9,14 +9,34 @@
     The view ids are load-bearing - RegisterFragment binds etEmail, etPassword,
     etConfirmPassword, btnSignUp and tvLogin.
 -->
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/konecta_blue_soft"
-    android:fillViewport="true"
     android:fitsSystemWindows="true">
+
+    <!--
+        The Kolibri stickers, as a physics field.
+
+        It is a SIBLING of the scroll view rather than a child of the form, for
+        two reasons: the stickers stay put while the form scrolls over them, and
+        the field gets the full height of the screen to move around in instead
+        of only the height of the form.
+
+        Being first, it draws behind everything else.
+    -->
+    <com.example.chatcircle.ui.common.StickerFieldView
+        android:id="@+id/stickerField"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/authScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
     <!--
         This container deliberately does NOT set focusableInTouchMode. The email
@@ -33,67 +53,6 @@
         android:paddingTop="48dp"
         android:paddingBottom="32dp"
         tools:context=".ui.auth.register.RegisterFragment">
-
-        <!--
-            Kolibri stickers, same treatment as fragment_login.xml - first
-            children so they sit behind the form, corners only, alpha around
-            0.2 - but a different four, so signing up does not look like a copy
-            of signing in. See fragment_login.xml for the full reasoning.
-        -->
-        <ImageView
-            android:id="@+id/stickerNodes"
-            android:layout_width="104dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="-28dp"
-            android:layout_marginTop="-10dp"
-            android:adjustViewBounds="true"
-            android:alpha="0.20"
-            android:contentDescription="@null"
-            android:rotation="-14"
-            android:src="@drawable/sticker_nodes"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/stickerAiAgents"
-            android:layout_width="102dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-4dp"
-            android:layout_marginEnd="-26dp"
-            android:adjustViewBounds="true"
-            android:alpha="0.18"
-            android:contentDescription="@null"
-            android:rotation="13"
-            android:src="@drawable/sticker_ai_agents"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/stickerRocket"
-            android:layout_width="108dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="-30dp"
-            android:layout_marginBottom="10dp"
-            android:adjustViewBounds="true"
-            android:alpha="0.20"
-            android:contentDescription="@null"
-            android:rotation="-10"
-            android:src="@drawable/sticker_rocket"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageView
-            android:id="@+id/stickerKolibri"
-            android:layout_width="128dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="-32dp"
-            android:adjustViewBounds="true"
-            android:alpha="0.22"
-            android:contentDescription="@null"
-            android:rotation="9"
-            android:src="@drawable/sticker_kolibri"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <!--
             The logo tile used to sit here. It was removed, but its 76dp is kept
@@ -254,4 +213,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

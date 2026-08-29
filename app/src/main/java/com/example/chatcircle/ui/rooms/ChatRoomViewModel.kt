@@ -3,8 +3,11 @@ package com.example.chatcircle.ui.rooms
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatcircle.domain.model.ChatRoom
+import com.example.chatcircle.domain.model.User
+import com.example.chatcircle.domain.repository.AuthRepository
 import com.example.chatcircle.domain.repository.ChatRepository
 import com.example.chatcircle.domain.repository.ChatRoomRepository
+import com.example.chatcircle.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,7 +32,9 @@ sealed class ChatRoomNavigationEvent {
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
     private val chatRoomRepository: ChatRoomRepository,
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ChatRoomUiState>(ChatRoomUiState.Idle)
@@ -44,8 +49,36 @@ class ChatRoomViewModel @Inject constructor(
     private val _unreadCounts = MutableStateFlow<Map<String, Int>>(emptyMap())
     val unreadCounts: StateFlow<Map<String, Int>> = _unreadCounts
 
+    /**
+     * Everyone else signed up, for starting a one-to-one chat.
+     *
+     * Empty until the users collection reports back, so the home screen shows
+     * its empty state rather than a spinner - a people strip that is briefly
+     * blank reads better than one that flashes a loader on every open.
+     */
+    private val _people = MutableStateFlow<List<User>>(emptyList())
+    val people: StateFlow<List<User>> = _people
+
+    /**
+     * The signed-in user, for the identity row on Home.
+     *
+     * Read once rather than observed: name and photo only change from the
+     * profile screen, which is a separate destination, so the value is always
+     * re-read when Home is returned to.
+     */
+    fun currentUser(): User? = authRepository.currentUser()
+
     init {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+
+        if (currentUserId != null) {
+            viewModelScope.launch {
+                userRepository.observeAllUsers(currentUserId).collect { users ->
+                    _people.value = users
+                }
+            }
+        }
+
         if (currentUserId != null) {
             viewModelScope.launch {
                 chatRoomRepository.observeUserRooms(currentUserId)

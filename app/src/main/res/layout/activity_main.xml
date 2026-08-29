@@ -15,9 +15,32 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--
+        Bottom navigation for the signed-in section.
+
+        MainActivity hides it on the screens that are not tabs - onboarding,
+        auth, the join screen and an open chat - so those keep the full height.
+        When it is GONE, ConstraintLayout resolves the nav host bottom to the
+        same edge, so the host simply fills the screen.
+
+        Item ids in bottom_nav_menu.xml match destination ids in the nav graph;
+        that pairing is what NavigationUI uses to switch tabs.
+    -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:elevation="8dp"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
     <!--
         Brand intro overlay - sits on top of the nav host and plays
@@ -36,8 +59,15 @@
         clickable/focusable keep touches from reaching the fragment underneath
         and give us tap-to-skip.
     -->
+    <!--
+        elevation, not just child order, is what keeps this above the bottom
+        bar. BottomNavigationView sets its own elevation, and on Android a
+        higher-elevation sibling draws on top no matter which was declared
+        last - which is why the bar was visible through the brand intro.
+    -->
     <FrameLayout
         android:id="@+id/splash_overlay"
+        android:elevation="24dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/konecta_yellow"

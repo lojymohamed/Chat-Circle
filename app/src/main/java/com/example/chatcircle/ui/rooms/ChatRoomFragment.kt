@@ -26,6 +26,7 @@ class ChatRoomFragment : Fragment() {
 
     private val viewModel: ChatRoomViewModel by viewModels()
     private lateinit var roomAdapter: ChatRoomAdapter
+    private lateinit var peopleAdapter: PeopleAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +70,19 @@ class ChatRoomFragment : Fragment() {
         }
         binding.roomsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.roomsRecyclerView.adapter = roomAdapter
+
+        // One-to-one chat does not exist yet, so tapping a person says so
+        // rather than silently doing nothing.
+        peopleAdapter = PeopleAdapter { person ->
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.home_direct_chat_soon, person.displayName),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        binding.peopleRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.peopleRecyclerView.adapter = peopleAdapter
     }
 
     private fun setupButtons() {
@@ -77,9 +91,11 @@ class ChatRoomFragment : Fragment() {
             viewModel.createRoom(roomName)
         }
 
+        // Joining has its own screen, with the scan shortcut on it.
         binding.joinRoomButton.setOnClickListener {
-            val roomCode = binding.roomCodeInput.text.toString()
-            viewModel.joinRoom(roomCode)
+            findNavController().navigate(
+                R.id.action_chatRoomFragment_to_joinRoomFragment
+            )
         }
     }
 
@@ -100,7 +116,6 @@ class ChatRoomFragment : Fragment() {
                                 binding.loadingSpinner.visibility = View.GONE
                                 binding.statusText.text = state.message
                                 binding.roomNameInput.text?.clear()
-                                binding.roomCodeInput.text?.clear()
                             }
                             is ChatRoomUiState.Error -> {
                                 binding.loadingSpinner.visibility = View.GONE
@@ -120,6 +135,16 @@ class ChatRoomFragment : Fragment() {
                 launch {
                     viewModel.unreadCounts.collect { counts ->
                         roomAdapter.updateUnreadCounts(counts)
+                    }
+                }
+
+                launch {
+                    viewModel.people.collect { people ->
+                        peopleAdapter.submitList(people)
+                        binding.peopleRecyclerView.visibility =
+                            if (people.isEmpty()) View.GONE else View.VISIBLE
+                        binding.peopleEmptyText.visibility =
+                            if (people.isEmpty()) View.VISIBLE else View.GONE
                     }
                 }
 

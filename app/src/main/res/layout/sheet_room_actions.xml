@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The sheet behind the Home FAB: create a room, or jump to joining one.
+
+    Both actions live here rather than as two rows that each open something
+    else. Creating only needs a name, so the field is right here and the sheet
+    is the whole interaction; joining needs a code and a camera, so that one
+    hands off to its own screen.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="28dp">
+
+    <!-- Grab handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_mock_field" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppinsbold"
+        android:text="@string/sheet_new_room"
+        android:textColor="@color/konecta_ink"
+        android:textSize="22sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/poppins"
+        android:text="@string/sheet_new_room_hint"
+        android:textColor="@color/konecta_muted"
+        android:textSize="14sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/sheetRoomNameLayout"
+        style="@style/Widget.ChatCircle.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:hint="@string/home_room_name_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/sheetRoomName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:imeOptions="actionDone"
+            android:inputType="textCapWords"
+            android:paddingVertical="15dp"
+            android:singleLine="true"
+            android:textColor="@color/konecta_ink"
+            android:textSize="15sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetCreate"
+        style="@style/Widget.ChatCircle.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/sheet_create" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/konecta_outline" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppinsmedium"
+        android:text="@string/sheet_join_title"
+        android:textColor="@color/konecta_muted"
+        android:textSize="14sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetJoin"
+        style="@style/Widget.ChatCircle.Button.Social"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/sheet_join_action"
+        android:textColor="@color/konecta_blue"
+        app:icon="@drawable/ic_qr_frame"
+        app:iconTint="@null" />
+
+</LinearLayout>

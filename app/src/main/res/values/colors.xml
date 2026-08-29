@@ -22,12 +22,20 @@
     <!-- Pressed / hovered state of the primary blue -->
     <color name="konecta_blue_dark">#FF1E0091</color>
     <!--
-        Very light blue wash used as the screen background. This is a flat
-        tint, not a gradient - the depth comes from the white cards and inputs
-        sitting on top of it, so if it needs adjusting, nudge this one value
-        rather than reaching for a gradient drawable.
+        Page background. Near-white and colour-neutral on purpose.
+
+        This used to carry a lavender tint from the brand blue, which read as
+        purple across whole screens rather than as a subtle wash. The brand
+        colour now appears only where it is meant to - accent bands, primary
+        buttons, headers - and pages stay white behind it.
+
+        Kept fractionally off white so bordered white cards still separate from
+        the page.
     -->
-    <color name="konecta_blue_soft">#FFEBE7FB</color>
+    <color name="konecta_blue_soft">#FFF7F8FB</color>
+
+    <!-- Slightly deeper neutral, for chips and inactive fills. -->
+    <color name="konecta_neutral">#FFEEF0F6</color>
     <!-- Tint for selected chips, ripples, and subtle fills -->
     <color name="konecta_blue_tint">#FFE4E0FB</color>
 
@@ -41,4 +49,22 @@
     <color name="konecta_surface">#FFFFFFFF</color>
 
     <color name="konecta_error">#FFD32F2F</color>
+
+    <!--
+        Avatar palette. A user with no photo gets a circle from this list,
+        picked by a stable hash of their uid, so the same person is always the
+        same colour everywhere in the app.
+
+        All eight are dark enough to carry white text at the small sizes these
+        avatars are drawn at.
+    -->
+    <color name="avatar_1">#FF0F9B8E</color>
+    <color name="avatar_2">#FF3D5AFE</color>
+    <color name="avatar_3">#FFE0574A</color>
+    <color name="avatar_4">#FF7E57C2</color>
+    <color name="avatar_5">#FFEF6C9A</color>
+    <color name="avatar_6">#FF2E9E4F</color>
+    <color name="avatar_7">#FFD98016</color>
+    <color name="avatar_8">#FF00838F</color>
+
 </resources>

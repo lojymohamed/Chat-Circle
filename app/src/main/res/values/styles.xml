@@ -74,4 +74,59 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <!-- Collapsing header title, expanded and pinned. -->
+    <style name="TextAppearance.ChatCircle.CollapsedTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/poppinssemibold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="TextAppearance.ChatCircle.ExpandedTitle" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:fontFamily">@font/poppinsbold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <!-- Section heading above a list, e.g. YOUR ROOMS. -->
+    <style name="TextAppearance.ChatCircle.SectionHeader" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">@font/poppinssemibold</item>
+        <item name="android:textColor">@color/konecta_ink</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+
+    <!-- Circular avatar mask, used for profile photos and people rows. -->
+    <style name="ShapeAppearance.ChatCircle.Avatar" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
+    <!--
+        The circular icon button used for header actions - the notification
+        bell, search, back, settings. One style so every one of them is the
+        same diameter and the same weight; they looked mismatched when each
+        screen sized its own.
+    -->
+    <style name="Widget.ChatCircle.IconButton.Circle" parent="Widget.Material3.Button.IconButton">
+        <item name="android:layout_width">52dp</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="backgroundTint">@color/konecta_neutral</item>
+        <item name="cornerRadius">26dp</item>
+        <item name="iconSize">26dp</item>
+        <item name="iconTint">@color/konecta_blue</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:padding">13dp</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <!-- Same button, but sitting on the brand blue rather than on white. -->
+    <style name="Widget.ChatCircle.IconButton.Circle.OnBrand">
+        <item name="backgroundTint">#33FFFFFF</item>
+        <item name="iconTint">@color/white</item>
+    </style>
+
 </resources>

@@ -8,7 +8,13 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.chatcircle.databinding.ActivityMainBinding
 import com.example.chatcircle.ui.splash.BrandIntroController
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +64,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupBottomNavigation()
 
         splashScreen.setKeepOnScreenCondition { !readyToDismissSystemSplash }
         splashScreen.setOnExitAnimationListener { provider ->
@@ -137,6 +145,48 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "enableEdgeToEdge() success: drawing behind system bars")
     }
 
+
+    /**
+     * Pairs the bottom bar with the nav controller and hides it off-tab.
+     *
+     * NavigationUI matches menu item ids to destination ids, so the wiring is
+     * just setupWithNavController - there is no click handling to write.
+     *
+     * The visibility listener is the part worth keeping: onboarding, auth, the
+     * join screen and an open chat are not tabs, and a bar sitting under them
+     * would both waste height and offer navigation that makes no sense mid-flow.
+     *
+     * The bottom inset is applied here rather than with fitsSystemWindows so the
+     * bar paints its own background behind the gesture area instead of floating
+     * above a strip of whatever is underneath.
+     */
+    private fun setupBottomNavigation() {
+        Log.d(TAG, "setupBottomNavigation() called")
+
+        val navHost = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
+
+        if (navHost == null) {
+            Log.e(TAG, "setupBottomNavigation(): nav host missing, bottom bar disabled")
+            binding.bottomNav.isVisible = false
+            return
+        }
+
+        binding.bottomNav.setupWithNavController(navHost.navController)
+
+        navHost.navController.addOnDestinationChangedListener { _, destination, _ ->
+            val isTab = destination.id in TAB_DESTINATIONS
+            Log.d(TAG, "onDestinationChanged(): id=${destination.id}, isTab=$isTab")
+            binding.bottomNav.isVisible = isTab
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNav) { view, windowInsets ->
+            val bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(bottom = bars.bottom)
+            windowInsets
+        }
+    }
+
     /** Hides the overlay immediately, without playing anything. */
     private fun skipBrandIntro() {
         Log.d(TAG, "skipBrandIntro() called")
@@ -158,5 +208,12 @@ class MainActivity : AppCompatActivity() {
          * a transition of its own.
          */
         const val SYSTEM_SPLASH_CROSSFADE_MS = 180L
+
+        /** Destinations that are bottom-bar tabs. Everything else hides it. */
+        val TAB_DESTINATIONS = setOf(
+            R.id.homeFragment,
+            R.id.directoryFragment,
+            R.id.profileFragment
+        )
     }
 }

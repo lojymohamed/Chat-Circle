@@ -40,7 +40,8 @@ class ChatRoomAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(room: ChatRoom, unreadCount: Int) {
-            binding.roomNameText.text = room.name
+            // Capitalised at render time, not on write - see RoomCardAdapter.
+            binding.roomNameText.text = room.name.replaceFirstChar { it.uppercase() }
             if (!room.lastMessage.isNullOrEmpty()) {
                 binding.lastMessageText.visibility = View.VISIBLE
                 binding.lastMessageText.text = room.lastMessage

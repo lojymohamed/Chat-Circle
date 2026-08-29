@@ -64,4 +64,81 @@
     <string name="onboarding_5_category">Profile</string>
     <string name="onboarding_5_title">Your profile</string>
     <string name="onboarding_5_meta">Photo, name and status</string>
+    <!-- Join room -->
+    <string name="join_title">Join a room</string>
+    <string name="join_subtitle">Enter the room code someone shared with you, or scan their QR code.</string>
+    <string name="join_code_hint">Room code</string>
+    <string name="join_scan_description">Scan a room QR code</string>
+    <string name="join_action">Enter</string>
+    <string name="join_create_instead">Create a new room instead</string>
+    <string name="join_scan_prompt">Point the camera at a room QR code</string>
+    <string name="join_code_empty">Enter a room code first</string>
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_photo_description">Your profile photo</string>
+    <string name="profile_change_photo">Tap your photo to change it</string>
+    <string name="profile_email_label">Email address</string>
+    <string name="profile_display_name">Display name</string>
+    <string name="profile_save">Save changes</string>
+    <string name="profile_sign_out">Sign out</string>
+    <string name="profile_role_default">Chat Circle member</string>
+    <string name="profile_edit_name">Edit display name</string>
+
+    <!-- Home -->
+    <string name="home_your_rooms">Your rooms</string>
+    <string name="home_people">People</string>
+    <string name="home_see_all">See all</string>
+    <string name="home_create_room">Create room</string>
+    <string name="home_join_room">Join with a code</string>
+    <string name="home_room_name_hint">New room name</string>
+    <string name="home_no_rooms">No rooms yet. Create one or join with a code.</string>
+    <string name="home_no_people">No one else has signed up yet.</string>
+    <string name="home_notifications">Notifications</string>
+    <string name="home_greeting">Welcome back</string>
+    <string name="home_direct_chat_soon">Direct chat with %1$s is coming soon</string>
+
+    <!-- Directory -->
+    <string name="directory_title">Directory</string>
+    <string name="directory_tab_rooms">Rooms</string>
+    <string name="directory_tab_people">People</string>
+    <string name="directory_search">Search</string>
+    <string name="directory_empty">Nothing here yet</string>
+    <string name="person_online">Online</string>
+    <string name="person_offline">Offline</string>
+    <!-- Bottom navigation -->
+    <string name="tab_home">Home</string>
+    <string name="tab_messages">Rooms</string>
+    <string name="tab_directory">Directory</string>
+    <string name="tab_profile">Profile</string>
+
+    <!-- Home dashboard -->
+    <string name="home_header_subtitle">Chat Circle member</string>
+    <string name="home_band_title">YOUR ROOMS</string>
+    <string name="home_speakers">PEOPLE</string>
+    <string name="home_band_empty">No rooms yet</string>
+    <string name="home_band_empty_hint">Create one or join with a code to get started.</string>
+    <string name="home_quick_create">Create</string>
+    <string name="home_quick_join">Join</string>
+    <string name="home_room_actions">Create or join a room</string>
+    <string name="sheet_new_room">New room</string>
+    <string name="sheet_new_room_hint">Give it a name and everyone you invite joins with one code.</string>
+    <string name="sheet_create">Create room</string>
+    <string name="sheet_join_title">Have a code already?</string>
+    <string name="sheet_join_action">Join with a code</string>
+    <string name="sheet_name_required">Give the room a name</string>
+    <string name="home_card_room">Room</string>
+    <string name="home_no_messages">No messages yet</string>
+    <string name="home_card_meta">%1$s  ·  %2$s</string>
+
+    <plurals name="room_members">
+        <item quantity="one">%1$d member</item>
+        <item quantity="other">%1$d members</item>
+    </plurals>
+
+
+    <!-- Notifications -->
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_empty">You are all caught up</string>
+    <string name="notifications_empty_hint">New messages in your rooms will show up here.</string>
+
 </resources>

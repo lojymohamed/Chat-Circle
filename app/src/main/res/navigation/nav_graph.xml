@@ -27,8 +27,8 @@
 
         <!-- Taken when a session is already active, so the intro is skipped -->
         <action
-            android:id="@+id/action_onboardingFragment_to_chatRoomFragment"
-            app:destination="@id/chatRoomFragment"
+            android:id="@+id/action_onboardingFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
             app:popUpTo="@id/onboardingFragment"
             app:popUpToInclusive="true" />
 
@@ -46,8 +46,10 @@
 
         <!-- Requirement 2: Login → Chat Rooms -->
         <action
-            android:id="@+id/action_loginFragment_to_chatRoomFragment"
-            app:destination="@id/chatRoomFragment" />
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
 
     </fragment>
 
@@ -65,6 +67,53 @@
         <action
             android:id="@+id/action_chatRoomFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_chatRoomFragment_to_joinRoomFragment"
+            app:destination="@id/joinRoomFragment" />
+    </fragment>
+
+    <!--
+        Joining by code lives on its own screen rather than inline on the room
+        list, so the code field and the scan shortcut get room to breathe.
+
+        Its action into the chat pops the join screen, so backing out of a room
+        you just joined returns to the room list rather than to the code field.
+    -->
+    <fragment
+        android:id="@+id/joinRoomFragment"
+        android:name="com.example.chatcircle.ui.rooms.JoinRoomFragment"
+        android:label="Join a room">
+        <action
+            android:id="@+id/action_joinRoomFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:popUpTo="@id/joinRoomFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!--
+        Home is the landing tab after signing in: a dashboard over the same
+        rooms and people data the other tabs list in full.
+    -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.chatcircle.ui.home.HomeFragment"
+        android:label="Home">
+        <action
+            android:id="@+id/action_homeFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_joinRoomFragment"
+            app:destination="@id/joinRoomFragment" />
+    </fragment>
+
+    <!-- Directory: rooms and people, searchable, behind two tabs. -->
+    <fragment
+        android:id="@+id/directoryFragment"
+        android:name="com.example.chatcircle.ui.directory.DirectoryFragment"
+        android:label="Directory">
+        <action
+            android:id="@+id/action_directoryFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
 
     <fragment

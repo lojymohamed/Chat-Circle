@@ -60,6 +60,9 @@ dependencies {
     // Onboarding pager
     implementation(libs.androidx.viewpager2)
 
+    // QR scanning for joining a room by code
+    implementation(libs.zxing.embedded)
+
     // Room (local cache DB)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

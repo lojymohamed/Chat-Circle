@@ -396,7 +396,7 @@ class OnboardingFragment : Fragment() {
 
     private fun goToRooms() {
         Log.d(TAG, "goToRooms() called")
-        findNavController().navigate(R.id.action_onboardingFragment_to_chatRoomFragment)
+        findNavController().navigate(R.id.action_onboardingFragment_to_homeFragment)
     }
 
     override fun onResume() {
